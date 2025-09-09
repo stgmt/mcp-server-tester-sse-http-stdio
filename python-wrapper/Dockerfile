@@ -17,7 +17,7 @@ FROM node:20-alpine
 
 # Метаданные
 LABEL maintainer="MCP Server Tester Team"
-LABEL version="1.0.0" 
+LABEL version="1.4.1" 
 LABEL description="Universal MCP Server Tester with NPM, Python, and Docker support"
 LABEL org.opencontainers.image.source="https://github.com/stgmt/mcp-server-tester-sse-http-stdio"
 LABEL org.opencontainers.image.url="https://github.com/stgmt/mcp-server-tester-sse-http-stdio"
@@ -50,9 +50,13 @@ COPY setup.py ./
 COPY pyproject.toml ./
 COPY README.md ./
 
+# Обновляем ca-certificates для решения SSL проблем
+RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
+
 # Установка Python зависимостей и пакета (обходим ограничения Alpine)
-RUN pip3 install --break-system-packages --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt && \
-    pip3 install --break-system-packages --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -e .
+RUN pip3 install --break-system-packages --no-cache-dir --upgrade pip setuptools wheel && \
+    pip3 install --break-system-packages --no-cache-dir -r requirements.txt && \
+    pip3 install --break-system-packages --no-cache-dir -e .
 
 # Создание entrypoint скрипта
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh

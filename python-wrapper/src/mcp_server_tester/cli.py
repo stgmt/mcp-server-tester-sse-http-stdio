@@ -87,11 +87,11 @@ def test(
 @click.option("--timeout", default=30000, help="Timeout in milliseconds")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
 def evals(
-    server_config: str, 
-    test: str, 
+    server_config: str,
+    test: str,
     server_name: Optional[str],
     timeout: int,
-    verbose: bool
+    verbose: bool,
 ):
     """Run LLM evaluation tests (requires ANTHROPIC_API_KEY)."""
     try:
@@ -124,10 +124,10 @@ def evals(
 @click.option("--timeout", default=30000, help="Timeout in milliseconds")
 def compliance(
     server_config: str,
-    server_name: Optional[str], 
+    server_name: Optional[str],
     categories: Optional[str],
     output: Optional[str],
-    timeout: int
+    timeout: int,
 ):
     """Run MCP protocol compliance checks."""
     try:
@@ -186,7 +186,15 @@ def docs():
 @click.option("--debug", is_flag=True, help="Enable debug output")
 @click.option("--junit-xml", help="Generate JUnit XML output file")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
-def tools(test_file: str, server_config: str, server_name: Optional[str], timeout: int, debug: bool, junit_xml: Optional[str], verbose: bool):
+def tools(
+    test_file: str,
+    server_config: str,
+    server_name: Optional[str],
+    timeout: int,
+    debug: bool,
+    junit_xml: Optional[str],
+    verbose: bool,
+):
     """Run MCP server tools tests (direct API testing)."""
     try:
         tester = MCPTester()

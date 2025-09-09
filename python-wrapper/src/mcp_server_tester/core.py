@@ -149,19 +149,19 @@ class MCPTester:
     ) -> MCPTestResult:
         """
         Run MCP server tools tests (alias for test_server with tools-specific options).
-        
+
         Args:
             test_config: Path to test configuration file or config dict
-            server_config: Path to server configuration file or config dict  
+            server_config: Path to server configuration file or config dict
             server_name: Name of server to test (required if multiple servers)
             timeout: Test timeout in milliseconds
             debug: Enable debug output
             junit_xml: Generate JUnit XML output file
             verbose: Enable verbose output
-            
+
         Returns:
             MCPTestResult: Test execution results
-            
+
         Raises:
             NodeJSNotFoundError: If Node.js is not installed
             NPMPackageNotFoundError: If NPM package is not available
@@ -171,7 +171,7 @@ class MCPTester:
         # Map to test_server call with appropriate format
         format = "junit" if junit_xml else "json"
         output_file = junit_xml if junit_xml else None
-        
+
         return self.test_server(
             server_config=server_config,
             test_config=test_config,
@@ -228,28 +228,29 @@ class MCPTester:
 
         # NPM пакет возвращает текстовый вывод, парсим его
         success = result.returncode == 0
-        
+
         # Парсим количество пройденных тестов из строки "📊 Results: 8/8 tests passed"
         passed_tests = 0
         total_tests = 0
         execution_time = 0.0
-        
-        for line in result.stdout.split('\n'):
-            if 'Results:' in line and 'tests passed' in line:
+
+        for line in result.stdout.split("\n"):
+            if "Results:" in line and "tests passed" in line:
                 # Парсим строку "📊 Results: 8/8 tests passed (5.8s)"
                 import re
-                match = re.search(r'(\d+)/(\d+)\s+tests\s+passed.*?\(([\d.]+)s\)', line)
+
+                match = re.search(r"(\d+)/(\d+)\s+tests\s+passed.*?\(([\d.]+)s\)", line)
                 if match:
                     passed_tests = int(match.group(1))
                     total_tests = int(match.group(2))
                     execution_time = float(match.group(3))
                 break
-        
+
         # Если парсинг не удался, используем fallback
         if total_tests == 0:
             passed_tests = 1 if success else 0
             total_tests = 1
-            
+
         return MCPTestResult(
             success=success,
             passed_tests=passed_tests,
@@ -274,7 +275,7 @@ class MCPTester:
 
         cmd = ["npx", self.npm_package_name, "evals", test_config_path]
         cmd.extend(["--server-config", server_config_path])
-        
+
         if server_name:
             cmd.extend(["--server-name", server_name])
         if timeout != 30000:
@@ -305,7 +306,7 @@ class MCPTester:
 
         cmd = ["npx", self.npm_package_name, "compliance"]
         cmd.extend(["--server-config", server_config_path])
-        
+
         if server_name:
             cmd.extend(["--server-name", server_name])
         if categories:
@@ -330,8 +331,10 @@ class MCPTester:
         cmd = ["npx", self.npm_package_name, "schema"]
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
-            raise MCPTestExecutionError("Failed to get schema", result.returncode, result.stderr)
-        
+            raise MCPTestExecutionError(
+                "Failed to get schema", result.returncode, result.stderr
+            )
+
         try:
             return json.loads(result.stdout)
         except json.JSONDecodeError:
@@ -342,8 +345,10 @@ class MCPTester:
         cmd = ["npx", self.npm_package_name, "documentation"]
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
-            raise MCPTestExecutionError("Failed to get documentation", result.returncode, result.stderr)
-        
+            raise MCPTestExecutionError(
+                "Failed to get documentation", result.returncode, result.stderr
+            )
+
         return result.stdout
 
     # Keep backward compatibility methods with deprecation warnings
@@ -357,24 +362,22 @@ class MCPTester:
         This method is kept for backward compatibility.
         """
         import warnings
+
         warnings.warn(
             "list_tools() is deprecated. Use test_server() with tool discovery tests instead.",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
-        
+
         # Create a basic tool discovery test
         test_config = {
-            "tools": {
-                "expected_tool_list": [],  # Will discover all tools
-                "tests": []
-            }
+            "tools": {"expected_tool_list": [], "tests": []}  # Will discover all tools
         }
-        
+
         try:
             result = self.test_server(server_config, test_config, server_name)
             # Extract tool names from result
-            return [{"name": tool} for tool in getattr(result, 'discovered_tools', [])]
+            return [{"name": tool} for tool in getattr(result, "discovered_tools", [])]
         except Exception:
             return []
 
@@ -384,12 +387,13 @@ class MCPTester:
         Basic validation of server configuration.
         """
         import warnings
+
         warnings.warn(
             "validate_config() is deprecated. Use run_compliance_check() for thorough validation.",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
-        
+
         try:
             # Basic JSON validation
             with open(config_path) as f:
