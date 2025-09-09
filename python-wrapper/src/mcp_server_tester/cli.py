@@ -16,7 +16,7 @@ from .exceptions import MCPTesterError
 
 @click.group()
 @click.version_option(version="1.0.0")
-def main():
+def main() -> None:
     """Python wrapper for mcp-server-tester-sse-http-stdio NPM package."""
     pass
 
@@ -49,7 +49,7 @@ def test(
     verbose: bool,
     format: str,
     output: Optional[str],
-):
+) -> None:
     """Test MCP server with given configuration."""
     try:
         tester = MCPTester()
