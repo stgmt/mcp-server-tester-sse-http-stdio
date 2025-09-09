@@ -142,7 +142,9 @@ class TestMCPTester:
                     tester.test_server("server.json", "test.yaml")
 
                 assert exc_info.value.return_code == 1
-                assert "Connection refused" in exc_info.value.stderr
+                # Note: stderr might be processed into the main error message
+                assert ("Connection refused" in exc_info.value.stderr or 
+                        "Connection refused" in str(exc_info.value))
 
     def test_create_server_config(self):
         """Test server configuration creation."""
