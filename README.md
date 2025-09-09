@@ -1,6 +1,6 @@
 # MCP Server Tester - Universal Testing Tool for Model Context Protocol
 
-[![License: Non-Commercial](https://img.shields.io/badge/License-Non--Commercial-orange.svg)](./LICENSE-COMMERCIAL)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![npm version](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
@@ -298,9 +298,7 @@ npm run build       # Production build
 
 ## 📄 License
 
-**Non-Commercial Use License** - see [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL)
-
-For commercial licensing, contact the author.
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 

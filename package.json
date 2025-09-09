@@ -52,7 +52,7 @@
     "api-testing"
   ],
   "author": "stgmt",
-  "license": "SEE LICENSE IN LICENSE-COMMERCIAL",
+  "license": "MIT",
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
