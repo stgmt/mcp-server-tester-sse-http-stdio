@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "test-server": {
+      "transport": "sse",
+      "url": "http://localhost:8001/sse"
+    },
+    "other-server": {
+      "transport": "stdio",
+      "command": "python",
+      "args": ["-m", "test_server"]
+    }
+  }
+}
