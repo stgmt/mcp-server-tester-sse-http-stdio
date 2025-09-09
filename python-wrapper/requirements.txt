@@ -1,11 +1,9 @@
-# Production dependencies
-pyyaml>=6.0
-click>=8.0.0
-requests>=2.28.0
+# 📦 Requirements for MCP Server Tester Python Wrapper
 
-# Development dependencies (use pip install -e .[dev] instead)
-# pytest>=7.0.0
-# pytest-cov>=4.0.0
-# black>=23.0.0
-# flake8>=6.0.0
-# mypy>=1.0.0
+# Core dependencies
+click>=8.0.0       # CLI framework
+pyyaml>=6.0        # YAML parsing for test configs
+requests>=2.28.0   # HTTP client (for future features)
+
+# Optional development dependencies
+# Install with: pip install -e ".[dev]"

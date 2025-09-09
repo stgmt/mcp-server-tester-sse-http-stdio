@@ -1,336 +1,227 @@
-# MCP Server Tester Python Wrapper
+# 🧪 MCP Server Tester - Фреймворк для программируемого тестирования
 
-[![PyPI version](https://badge.fury.io/py/mcp-server-tester.svg)](https://badge.fury.io/py/mcp-server-tester)
-[![Python Support](https://img.shields.io/pypi/pyversions/mcp-server-tester.svg)](https://pypi.org/project/mcp-server-tester/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+**Универсальный фреймворк для программируемого unit и integration тестирования MCP (Model Context Protocol) серверов всех доступных протоколов.**
 
-Python wrapper for the [mcp-server-tester-sse-http-stdio](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio) NPM package.
+[![Python Package](https://img.shields.io/pypi/v/mcp-server-tester)](https://pypi.org/project/mcp-server-tester/)
+[![Docker Image](https://img.shields.io/docker/v/stgmt/mcp-server-tester)](https://hub.docker.com/r/stgmt/mcp-server-tester)
+[![NPM Package](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
 
-This package provides a Python interface to test Model Context Protocol (MCP) servers using multiple transport protocols (SSE, STDIO, HTTP).
+## 🎯 Что это такое?
 
-## 🚀 Features
+MCP Server Tester — это комплексный инструмент для автоматизированного тестирования MCP серверов, поддерживающий:
 
-- **Multiple Transport Protocols**: SSE, STDIO, HTTP support
-- **Python Integration**: Native Python API with type hints
-- **CLI Interface**: Command-line tools for testing
-- **Interactive Configuration**: Easy setup wizards
-- **Comprehensive Testing**: Unit tests with pytest
-- **Cross-Platform**: Works on Windows, macOS, Linux
+- **📋 Unit тестирование** - тестирование отдельных инструментов и функций
+- **🔄 Integration тестирование** - проверка взаимодействия между компонентами  
+- **🌐 Protocol тестирование** - поддержка всех MCP протоколов (HTTP, SSE, STDIO)
+- **🤖 LLM Evaluation** - тестирование с помощью больших языковых моделей
+- **📊 Compliance проверки** - соответствие MCP спецификации
 
-## 📋 Prerequisites
+### Поддерживаемые протоколы:
+- ✅ **HTTP** - REST API интерфейс
+- ✅ **SSE (Server-Sent Events)** - потоковая передача данных  
+- ✅ **STDIO** - стандартный ввод/вывод для процессов
 
-- **Python 3.8+**
-- **Node.js 18.0.0+** (required for underlying NPM package)
-- **NPM package**: `mcp-server-tester-sse-http-stdio`
+## 🚀 Три способа использования
 
-## 🛠 Installation
+| Способ | Установка | Преимущества | Использование |
+|--------|-----------|--------------|---------------|
+| **🐍 Python** | `pip install mcp-server-tester` | Программируемый API | Python интеграция |
+| **🐳 Docker** | `docker pull stgmt/mcp-server-tester` | Без зависимостей | Изолированное тестирование |
+| **📦 NPM** | `npm install -g mcp-server-tester-sse-http-stdio` | Максимальная скорость | Нативная производительность |
 
-### 1. Install Python package
+## 📦 Быстрый старт
+
+### Python API (Рекомендуется для программирования)
 
 ```bash
 pip install mcp-server-tester
 ```
 
-### 2. Install NPM dependency
-
-```bash
-# Global installation (recommended)
-npm install -g mcp-server-tester-sse-http-stdio
-
-# Or using npx (will download on demand)
-npx mcp-server-tester-sse-http-stdio --help
-```
-
-### 3. Verify installation
-
-```bash
-mcp-server-tester doctor
-```
-
-## 🏃‍♂️ Quick Start
-
-### Python API
-
 ```python
 from mcp_server_tester import MCPTester
 
-# Initialize tester
+# Инициализация тестера
 tester = MCPTester()
 
-# Test with configuration files
+# Программируемое тестирование
 result = tester.test_server(
-    server_config="server-config.json",
-    test_config="test-config.yaml", 
+    server_config="config.json",
+    test_config="test.yaml", 
     server_name="my-server"
 )
 
-print(f"✅ Tests passed: {result.passed_tests}/{result.total_tests}")
-print(f"⏱️ Execution time: {result.execution_time:.2f}s")
+print(f"✅ {result.passed_tests}/{result.total_tests} тестов прошли")
+print(f"⏱️ Время выполнения: {result.execution_time:.1f}s")
 
-# Test with configuration dictionaries
-server_config = {
-    "mcpServers": {
-        "test-server": {
-            "transport": "sse",
-            "url": "http://localhost:8001/sse"
-        }
-    }
-}
-
-test_config = {
-    "tools": {
-        "tests": [
-            {
-                "name": "basic-test",
-                "calls": [
-                    {"tool": "list_files"},
-                    {"tool": "read_file", "arguments": {"path": "test.txt"}}
-                ]
-            }
-        ]
-    }
-}
-
-result = tester.test_server(server_config, test_config)
+# Интеграция в unit тесты
+def test_mcp_integration():
+    result = tester.test_server(server_config, test_config, "my-server")
+    assert result.success, f"MCP tests failed: {result.failed_tests}"
 ```
 
-### CLI Usage
+### Docker (Рекомендуется для CI/CD)
 
 ```bash
-# Test MCP server
-mcp-server-tester test \\
-    --server-config server.json \\
-    --test test.yaml \\
-    --server-name my-server
+# Быстрая проверка без установки зависимостей
+docker run --rm stgmt/mcp-server-tester --help
 
-# List available tools
-mcp-server-tester tools --server-config server.json --server-name my-server
+# Тестирование с локальными файлами
+docker run --rm \
+  -v $(pwd):/workspace \
+  stgmt/mcp-server-tester \
+  tools /workspace/test.yaml \
+  --server-config /workspace/config.json \
+  --server-name my-server
 
-# Validate configuration
-mcp-server-tester validate server.json
-
-# Interactive configuration creation
-mcp-server-tester create-server-config --output server.json
-mcp-server-tester create-test-config --output test.yaml
-
-# System diagnostics
-mcp-server-tester doctor
+# Поддержка всех архитектур (AMD64, ARM64)
+docker run --rm --platform linux/arm64 stgmt/mcp-server-tester --version
 ```
 
-## 📁 Configuration Files
+### CLI команды
 
-### Server Configuration (JSON)
+```bash
+# Unit тестирование инструментов
+mcp-server-tester test --server-config config.json --test test.yaml --server-name my-server
 
+# Integration тестирование соответствия протоколу
+mcp-server-tester compliance --server-config config.json --server-name my-server
+
+# LLM Evaluation тесты (требует ANTHROPIC_API_KEY)
+mcp-server-tester evals --server-config config.json --test eval.yaml --server-name my-server
+
+# Диагностика системы
+mcp-server-tester doctor
+
+# Интерактивное создание конфигураций
+mcp-server-tester create-server-config
+mcp-server-tester create-test-config
+```
+
+## 🔧 Программируемое тестирование
+
+### Конфигурация сервера (server-config.json)
 ```json
 {
   "mcpServers": {
-    "sse-server": {
+    "my-server": {
       "transport": "sse",
       "url": "http://localhost:8001/sse"
-    },
-    "stdio-server": {
-      "transport": "stdio", 
-      "command": "python",
-      "args": ["-m", "my_mcp_server"]
-    },
-    "http-server": {
-      "transport": "http",
-      "url": "http://localhost:8000"
     }
   }
 }
 ```
 
-### Test Configuration (YAML)
-
+### Тестовые сценарии (test.yaml)
 ```yaml
 tools:
   tests:
-    - name: "Basic functionality test"
-      calls:
-        - tool: "list_files"
-        - tool: "read_file"
-          arguments:
-            path: "example.txt"
-        - tool: "write_file"
-          arguments:
-            path: "output.txt"
-            content: "Hello, World!"
-
-    - name: "Error handling test"
-      calls:
-        - tool: "nonexistent_tool"
-          expect_error: true
+    - name: "Unit: Test file listing"
+      tool: "list_files"
+      params: {}
+      expect:
+        success: true
+        
+    - name: "Integration: Search and process"
+      tool: "search_files"
+      params:
+        query: "test"
+      expect:
+        success: true
+        result_contains: ["results"]
 ```
 
-## 🔧 Advanced Usage
-
-### Custom Test Results Processing
-
+### Python программирование тестов
 ```python
-from mcp_server_tester import MCPTester
-
-tester = MCPTester()
-
-result = tester.test_server("server.json", "test.yaml")
-
-if result.success:
-    print(f"✅ All {result.total_tests} tests passed!")
-    print(f"Execution time: {result.execution_time:.2f}s")
-else:
-    print(f"❌ {len(result.failed_tests)} tests failed:")
-    for failed_test in result.failed_tests:
-        print(f"  - {failed_test.get('name', 'Unknown')}: {failed_test.get('error', 'Unknown error')}")
-```
-
-### Configuration Helpers
-
-```python
-from mcp_server_tester import MCPTester
-
-# Create server configuration programmatically
-servers = {
-    "production-server": {
-        "transport": "sse",
-        "url": "https://api.example.com/mcp/sse"
-    },
-    "local-server": {
-        "transport": "stdio",
-        "command": "python", 
-        "args": ["-m", "my_server", "--debug"]
+# Создание тестов в коде
+test_config = {
+    "tools": {
+        "tests": [
+            {
+                "name": "Unit: Basic functionality",
+                "tool": "list_files",
+                "params": {},
+                "expect": {"success": True}
+            },
+            {
+                "name": "Integration: Complex workflow", 
+                "tool": "process_data",
+                "params": {"data": "test"},
+                "expect": {
+                    "success": True,
+                    "result_contains": ["processed"]
+                }
+            }
+        ]
     }
 }
 
-config_json = MCPTester.create_server_config(servers, "servers.json")
-print("Server configuration created!")
+# Выполнение программируемых тестов
+result = tester.test_server(server_config, test_config, "my-server")
 
-# Create test configuration
-tests = [
-    {
-        "name": "API Integration Test",
-        "calls": [
-            {"tool": "get_user", "arguments": {"user_id": 123}},
-            {"tool": "list_products", "arguments": {"category": "electronics"}}
-        ]
-    }
-]
-
-config_yaml = MCPTester.create_test_config(tests, "api-tests.yaml")
-print("Test configuration created!")
+# Анализ результатов
+for test_result in result.test_results:
+    print(f"Test: {test_result.name}")
+    print(f"Status: {'PASSED' if test_result.success else 'FAILED'}")
+    if not test_result.success:
+        print(f"Error: {test_result.error}")
 ```
 
-## 🧪 Testing
+## 📊 Поддерживаемые платформы
 
-```bash
-# Run all tests
-pytest
+### Архитектуры
+- ✅ **AMD64** (Intel/AMD x86_64)
+- ✅ **ARM64** (Apple Silicon M1/M2/M3, ARM серверы)
+- ✅ **Multi-platform Docker** с автоматическим выбором архитектуры
 
-# Run with coverage
-pytest --cov=mcp_server_tester --cov-report=html
+### Операционные системы  
+- ✅ **Linux** (все дистрибутивы)
+- ✅ **macOS** (Intel и Apple Silicon)
+- ✅ **Windows** (с Docker Desktop или WSL2)
+- ✅ **Облачные платформы** (AWS, GCP, Azure)
 
-# Run specific test file
-pytest tests/test_core.py
+## 🌐 Ссылки и ресурсы
 
-# Run with verbose output
-pytest -v
-```
+### Основные ресурсы
+- 📦 **NPM**: https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio
+- 🐍 **PyPI**: https://pypi.org/project/mcp-server-tester/
+- 🐳 **Docker Hub**: https://hub.docker.com/r/stgmt/mcp-server-tester
+- 📖 **GitHub**: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
 
-## 🛠 Development
+### Протокол MCP
+- 🔗 **MCP Specification**: https://modelcontextprotocol.io
+- 📚 **MCP Documentation**: https://docs.anthropic.com/en/docs/build-with-claude/model-context-protocol
 
-### Setup Development Environment
+## 📈 Примеры использования
 
-```bash
-# Clone repository
-git clone https://github.com/stgmt/mcp-server-tester-python.git
-cd mcp-server-tester-python
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\\Scripts\\activate
-
-# Install in development mode with dev dependencies
-pip install -e .[dev]
-
-# Install NPM dependency
-npm install -g mcp-server-tester-sse-http-stdio
-
-# Run tests
-pytest
-```
-
-### Code Quality
-
-```bash
-# Format code
-black src/ tests/
-
-# Lint code
-flake8 src/ tests/
-
-# Type checking
-mypy src/
-```
-
-## 🚨 Common Pitfalls
-
-### ❌ Wrong: Missing server-name parameter
-```bash
-# This fails when multiple servers exist in config
-mcp-server-tester test --server-config multi-server.json --test test.yaml
-```
-
-### ✅ Correct: Specify server name
-```bash
-mcp-server-tester test --server-config multi-server.json --test test.yaml --server-name specific-server
-```
-
-### ❌ Wrong: Node.js not installed
+### В Python проектах
 ```python
-from mcp_server_tester import MCPTester
-tester = MCPTester()  # Raises NodeJSNotFoundError
+# Интеграция в pytest
+def test_mcp_server_integration():
+    tester = MCPTester()
+    result = tester.test_server("config.json", "tests.yaml", "my-server")
+    assert result.success, f"MCP integration failed: {result.error_details}"
 ```
 
-### ✅ Correct: Install Node.js first
+### В CI/CD (GitHub Actions)
+```yaml
+- name: Test MCP Server
+  run: |
+    docker run --rm --network host \
+      -v ${{ github.workspace }}:/workspace \
+      stgmt/mcp-server-tester \
+      tools /workspace/test-config.yaml \
+      --server-config /workspace/server-config.json
+```
+
+### В разработке
 ```bash
-# Install Node.js from https://nodejs.org/
-# Then verify:
-mcp-server-tester doctor
+# Быстрая проверка во время разработки
+docker run --rm --network host \
+  -v $(pwd):/workspace \
+  stgmt/mcp-server-tester \
+  doctor
 ```
-
-### ❌ Wrong: NPM package not found
-```bash
-npx mcp-server-tester-sse-http-stdio --help  # Command not found
-```
-
-### ✅ Correct: Install NPM package
-```bash
-npm install -g mcp-server-tester-sse-http-stdio
-# Or let npx handle it automatically
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🔗 Related Projects
-
-- [mcp-server-tester-sse-http-stdio](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio) - The underlying NPM package
-- [Model Context Protocol](https://github.com/anthropics/model-context-protocol) - Official MCP specification
-
-## 📧 Support
-
-- **Issues**: [GitHub Issues](https://github.com/stgmt/mcp-server-tester-python/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/stgmt/mcp-server-tester-python/discussions)
-- **NPM Package Issues**: [NPM Package Issues](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/issues)
 
 ---
 
-**Made with ❤️ by the MCP community**
+**🎯 MCP Server Tester - единое решение для comprehensive тестирования MCP серверов всех типов и протоколов!**

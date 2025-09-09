@@ -80,11 +80,120 @@ def test(
 @click.option(
     "--server-config", "-s", required=True, help="Path to server configuration file"
 )
+@click.option("--test", "-t", required=True, help="Path to test configuration file")
+@click.option(
+    "--server-name", "-n", help="Name of server to test (required if multiple servers)"
+)
+@click.option("--timeout", default=30000, help="Timeout in milliseconds")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+def evals(
+    server_config: str, 
+    test: str, 
+    server_name: Optional[str],
+    timeout: int,
+    verbose: bool
+):
+    """Run LLM evaluation tests (requires ANTHROPIC_API_KEY)."""
+    try:
+        tester = MCPTester()
+        result = tester.run_evals(
+            test_config=test,
+            server_config=server_config,
+            server_name=server_name,
+            timeout=timeout,
+            verbose=verbose,
+        )
+
+        click.echo(result.output)
+        sys.exit(0 if result.success else 1)
+
+    except MCPTesterError as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+
+@main.command()
+@click.option(
+    "--server-config", "-s", required=True, help="Path to server configuration file"
+)
+@click.option(
+    "--server-name", "-n", help="Name of server to test (required if multiple servers)"
+)
+@click.option("--categories", help="Comma-separated compliance categories to check")
+@click.option("--output", "-o", help="Output file path for results")
+@click.option("--timeout", default=30000, help="Timeout in milliseconds")
+def compliance(
+    server_config: str,
+    server_name: Optional[str], 
+    categories: Optional[str],
+    output: Optional[str],
+    timeout: int
+):
+    """Run MCP protocol compliance checks."""
+    try:
+        tester = MCPTester()
+        result = tester.run_compliance_check(
+            server_config=server_config,
+            server_name=server_name,
+            categories=categories,
+            output=output,
+            timeout=timeout,
+        )
+
+        click.echo(result.output)
+        sys.exit(0 if result.success else 1)
+
+    except MCPTesterError as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+
+@main.command()
+def schema():
+    """Display JSON schema for test configuration files."""
+    try:
+        tester = MCPTester()
+        schema_data = tester.get_schema()
+        click.echo(json.dumps(schema_data, indent=2))
+
+    except MCPTesterError as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+
+@main.command(name="documentation")
+def docs():
+    """Display full documentation for MCP Server Tester."""
+    try:
+        tester = MCPTester()
+        documentation = tester.get_documentation()
+        click.echo(documentation)
+
+    except MCPTesterError as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+
+
+# DEPRECATED: Keep for backward compatibility
+@main.command()
+@click.option(
+    "--server-config", "-s", required=True, help="Path to server configuration file"
+)
 @click.option(
     "--server-name", "-n", help="Name of server to test (required if multiple servers)"
 )
 def tools(server_config: str, server_name: Optional[str]):
-    """List available tools from MCP server."""
+    """
+    DEPRECATED: List available tools from MCP server.
+    Use 'test' command with tool discovery configuration instead.
+    """
+    import warnings
+    warnings.warn(
+        "The 'tools' command is deprecated. Use 'test' command with tool discovery tests instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    
     try:
         tester = MCPTester()
         tools_list = tester.list_tools(server_config, server_name)

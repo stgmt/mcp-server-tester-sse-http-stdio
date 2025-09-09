@@ -105,9 +105,8 @@ class MCPTester:
         test_config_path = self._prepare_config(test_config, "test_config")
 
         # Build command
-        cmd = ["npx", self.npm_package_name]
+        cmd = ["npx", self.npm_package_name, "tools", test_config_path]
         cmd.extend(["--server-config", server_config_path])
-        cmd.extend(["--test", test_config_path])
 
         if server_name:
             cmd.extend(["--server-name", server_name])
@@ -127,7 +126,7 @@ class MCPTester:
                 capture_output=True,
                 text=True,
                 timeout=timeout / 1000.0,  # Convert to seconds
-                cwd=Path.cwd(),
+                # Не указываем cwd - пусть использует текущую директорию
             )
 
             # Parse results
@@ -182,76 +181,177 @@ class MCPTester:
                 stderr=result.stderr,
             )
 
-        if format == "json":
-            try:
-                output_data = json.loads(result.stdout)
-                return MCPTestResult(
-                    success=output_data.get("success", False),
-                    passed_tests=output_data.get("passed", 0),
-                    total_tests=output_data.get("total", 0),
-                    failed_tests=output_data.get("failed", []),
-                    execution_time=output_data.get("execution_time", 0.0),
-                    output=result.stdout,
-                )
-            except json.JSONDecodeError:
-                # Fallback for non-JSON output
-                return MCPTestResult(
-                    success=result.returncode == 0,
-                    passed_tests=1 if result.returncode == 0 else 0,
-                    total_tests=1,
-                    failed_tests=(
-                        []
-                        if result.returncode == 0
-                        else [{"error": "JSON parsing failed"}]
-                    ),
-                    execution_time=0.0,
-                    output=result.stdout,
-                    error=result.stderr,
-                )
-        else:
-            # For non-JSON formats, return basic result
-            return MCPTestResult(
-                success=result.returncode == 0,
-                passed_tests=1 if result.returncode == 0 else 0,
-                total_tests=1,
-                failed_tests=(
-                    [] if result.returncode == 0 else [{"error": "Test failed"}]
-                ),
-                execution_time=0.0,
-                output=result.stdout,
-                error=result.stderr,
-            )
+        # NPM пакет возвращает текстовый вывод, парсим его
+        success = result.returncode == 0
+        
+        # Парсим количество пройденных тестов из строки "📊 Results: 8/8 tests passed"
+        passed_tests = 0
+        total_tests = 0
+        execution_time = 0.0
+        
+        for line in result.stdout.split('\n'):
+            if 'Results:' in line and 'tests passed' in line:
+                # Парсим строку "📊 Results: 8/8 tests passed (5.8s)"
+                import re
+                match = re.search(r'(\d+)/(\d+)\s+tests\s+passed.*?\(([\d.]+)s\)', line)
+                if match:
+                    passed_tests = int(match.group(1))
+                    total_tests = int(match.group(2))
+                    execution_time = float(match.group(3))
+                break
+        
+        # Если парсинг не удался, используем fallback
+        if total_tests == 0:
+            passed_tests = 1 if success else 0
+            total_tests = 1
+            
+        return MCPTestResult(
+            success=success,
+            passed_tests=passed_tests,
+            total_tests=total_tests,
+            failed_tests=[] if success else [{"error": "Test execution failed"}],
+            execution_time=execution_time,
+            output=result.stdout,
+            error=result.stderr,
+        )
 
+    def run_evals(
+        self,
+        test_config: Union[str, Path, Dict[str, Any]],
+        server_config: Union[str, Path, Dict[str, Any]],
+        server_name: Optional[str] = None,
+        timeout: int = 30000,
+        verbose: bool = False,
+    ) -> MCPTestResult:
+        """Run LLM evaluation tests (requires ANTHROPIC_API_KEY)."""
+        server_config_path = self._prepare_config(server_config, "server_config")
+        test_config_path = self._prepare_config(test_config, "test_config")
+
+        cmd = ["npx", self.npm_package_name, "evals", test_config_path]
+        cmd.extend(["--server-config", server_config_path])
+        
+        if server_name:
+            cmd.extend(["--server-name", server_name])
+        if timeout != 30000:
+            cmd.extend(["--timeout", str(timeout)])
+        if verbose:
+            cmd.append("--verbose")
+
+        try:
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, timeout=timeout / 1000.0
+            )
+            return self._parse_result(result, "json")
+        except subprocess.TimeoutExpired:
+            raise MCPTestExecutionError(f"Eval execution timed out after {timeout}ms")
+        except Exception as e:
+            raise MCPTestExecutionError(f"Eval execution failed: {str(e)}")
+
+    def run_compliance_check(
+        self,
+        server_config: Union[str, Path, Dict[str, Any]],
+        server_name: Optional[str] = None,
+        categories: Optional[str] = None,
+        output: Optional[str] = None,
+        timeout: int = 30000,
+    ) -> MCPTestResult:
+        """Run MCP protocol compliance checks."""
+        server_config_path = self._prepare_config(server_config, "server_config")
+
+        cmd = ["npx", self.npm_package_name, "compliance"]
+        cmd.extend(["--server-config", server_config_path])
+        
+        if server_name:
+            cmd.extend(["--server-name", server_name])
+        if categories:
+            cmd.extend(["--categories", categories])
+        if output:
+            cmd.extend(["--output", output])
+        if timeout != 30000:
+            cmd.extend(["--timeout", str(timeout)])
+
+        try:
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, timeout=timeout / 1000.0
+            )
+            return self._parse_result(result, "json")
+        except subprocess.TimeoutExpired:
+            raise MCPTestExecutionError(f"Compliance check timed out after {timeout}ms")
+        except Exception as e:
+            raise MCPTestExecutionError(f"Compliance check failed: {str(e)}")
+
+    def get_schema(self) -> Dict[str, Any]:
+        """Display JSON schema for test configuration files."""
+        cmd = ["npx", self.npm_package_name, "schema"]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise MCPTestExecutionError("Failed to get schema", result.returncode, result.stderr)
+        
+        try:
+            return json.loads(result.stdout)
+        except json.JSONDecodeError:
+            return {"schema": result.stdout}
+
+    def get_documentation(self) -> str:
+        """Get full documentation for MCP Server Tester."""
+        cmd = ["npx", self.npm_package_name, "documentation"]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise MCPTestExecutionError("Failed to get documentation", result.returncode, result.stderr)
+        
+        return result.stdout
+
+    # Keep backward compatibility methods with deprecation warnings
     def list_tools(
         self,
         server_config: Union[str, Path, Dict[str, Any]],
         server_name: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
-        """List available tools from MCP server."""
-        # This would use the tools listing functionality
-        cmd = ["npx", self.npm_package_name, "tools"]
-        cmd.extend(
-            ["--server-config", self._prepare_config(server_config, "server_config")]
+        """
+        DEPRECATED: Use test_server() with appropriate test configuration instead.
+        This method is kept for backward compatibility.
+        """
+        import warnings
+        warnings.warn(
+            "list_tools() is deprecated. Use test_server() with tool discovery tests instead.",
+            DeprecationWarning,
+            stacklevel=2
         )
-        if server_name:
-            cmd.extend(["--server-name", server_name])
-
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode != 0:
-            raise MCPTestExecutionError(
-                "Failed to list tools", result.returncode, result.stderr
-            )
-
+        
+        # Create a basic tool discovery test
+        test_config = {
+            "tools": {
+                "expected_tool_list": [],  # Will discover all tools
+                "tests": []
+            }
+        }
+        
         try:
-            return json.loads(result.stdout)
-        except json.JSONDecodeError:
+            result = self.test_server(server_config, test_config, server_name)
+            # Extract tool names from result
+            return [{"name": tool} for tool in getattr(result, 'discovered_tools', [])]
+        except Exception:
             return []
 
     def validate_config(self, config_path: Union[str, Path]) -> bool:
-        """Validate MCP server configuration."""
-        cmd = ["npx", self.npm_package_name, "validate", str(config_path)]
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        return result.returncode == 0
+        """
+        DEPRECATED: Use run_compliance_check() instead.
+        Basic validation of server configuration.
+        """
+        import warnings
+        warnings.warn(
+            "validate_config() is deprecated. Use run_compliance_check() for thorough validation.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        
+        try:
+            # Basic JSON validation
+            with open(config_path) as f:
+                json.load(f)
+            return True
+        except Exception:
+            return False
 
     @staticmethod
     def create_server_config(

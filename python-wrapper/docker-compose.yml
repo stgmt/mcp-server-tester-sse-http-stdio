@@ -1,0 +1,109 @@
+# 🐳 Docker Compose для MCP Server Tester
+#
+# Предоставляет несколько вариантов использования:
+# 1. Standalone сервис для тестирования
+# 2. Интеграция с существующими MCP серверами
+# 3. Development окружение
+
+version: '3.8'
+
+services:
+  # Основной MCP Server Tester сервис
+  mcp-tester:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: mcp-server-tester:latest
+    container_name: mcp-server-tester
+    volumes:
+      # Монтируем текущую директорию как workspace
+      - ./:/workspace
+      # Монтируем примеры и тесты
+      - ./examples:/workspace/examples
+      - ./tests:/workspace/tests
+    working_dir: /workspace
+    environment:
+      - MCP_TESTER_DEFAULT_TIMEOUT=30000
+      - MCP_TESTER_DEFAULT_FORMAT=console
+    networks:
+      - mcp-network
+    profiles:
+      - default
+    # Команда по умолчанию - показать справку
+    command: ["--help"]
+
+  # Интерактивный режим для разработки
+  mcp-tester-dev:
+    extends: mcp-tester
+    container_name: mcp-server-tester-dev
+    profiles:
+      - dev
+    stdin_open: true
+    tty: true
+    # Запуск в интерактивном bash
+    command: ["bash"]
+    volumes:
+      - ./:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock  # Для тестирования Docker-based MCP серверов
+
+  # Пример: тестирование HTTP MCP сервера
+  test-http-server:
+    extends: mcp-tester
+    container_name: mcp-tester-http-example
+    profiles:
+      - examples
+    command: [
+      "tools", 
+      "examples/http-test.yaml", 
+      "--server-config", "examples/http-config.json",
+      "--server-name", "example-http-server"
+    ]
+    depends_on:
+      - example-http-server
+
+  # Пример: тестирование SSE MCP сервера  
+  test-sse-server:
+    extends: mcp-tester
+    container_name: mcp-tester-sse-example
+    profiles:
+      - examples
+    command: [
+      "tools",
+      "examples/sse-test.yaml",
+      "--server-config", "examples/sse-config.json", 
+      "--server-name", "example-sse-server"
+    ]
+    depends_on:
+      - example-sse-server
+
+  # Примеры MCP серверов для демонстрации
+  example-http-server:
+    image: nginx:alpine
+    container_name: example-http-server
+    profiles:
+      - examples
+    ports:
+      - "8080:80"
+    volumes:
+      - ./examples/http-server:/usr/share/nginx/html
+    networks:
+      - mcp-network
+
+  example-sse-server:
+    image: node:20-alpine
+    container_name: example-sse-server  
+    profiles:
+      - examples
+    ports:
+      - "8001:8001"
+    working_dir: /app
+    volumes:
+      - ./examples/sse-server:/app
+    networks:
+      - mcp-network
+    command: ["node", "server.js"]
+
+networks:
+  mcp-network:
+    driver: bridge
+    name: mcp-network
