@@ -82,10 +82,18 @@ describe('Schema Validation', () => {
       const validConfig = path.join(fixturesDir, 'test-server-config.json');
 
       expect(() => {
-        const config = ConfigLoader.loadServerConfig(validConfig, 'test-server');
-        expect(config).toHaveProperty('command');
-        expect(config).toHaveProperty('args');
-        expect(config.command).toBe('node');
+        // Test SSE server config
+        const sseConfig = ConfigLoader.loadServerConfig(validConfig, 'test-server');
+        expect(sseConfig).toHaveProperty('transport');
+        expect(sseConfig).toHaveProperty('url');
+        expect(sseConfig.transport).toBe('sse');
+        expect(sseConfig.url).toBe('http://localhost:8001/sse');
+
+        // Test STDIO server config
+        const stdioConfig = ConfigLoader.loadServerConfig(validConfig, 'other-server');
+        expect(stdioConfig).toHaveProperty('command');
+        expect(stdioConfig).toHaveProperty('args');
+        expect(stdioConfig.command).toBe('python');
       }).not.toThrow();
     });
 

@@ -29,8 +29,9 @@ jobs:
     - name: Run linter
       run: npm run lint
       
-    - name: Run tests
-      run: npm test
+    # Run only unit tests in CI - e2e tests require live MCP servers
+    - name: Run unit tests
+      run: npm run test:unit
 
     - name: Build project
       run: npm run build
