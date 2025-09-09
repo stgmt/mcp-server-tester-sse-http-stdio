@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-tester-sse-http-stdio",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "MCP Server Tester with SSE support - Test MCP servers using HTTP, SSE, and STDIO transports",
   "main": "dist/cli.js",
   "bin": {
