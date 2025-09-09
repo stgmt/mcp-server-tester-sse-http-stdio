@@ -137,6 +137,51 @@ class MCPTester:
         except Exception as e:
             raise MCPTestExecutionError(f"Test execution failed: {str(e)}")
 
+    def run_tools_test(
+        self,
+        test_config: Union[str, Path, Dict[str, Any]],
+        server_config: Union[str, Path, Dict[str, Any]],
+        server_name: Optional[str] = None,
+        timeout: int = 30000,
+        debug: bool = False,
+        junit_xml: Optional[str] = None,
+        verbose: bool = False,
+    ) -> MCPTestResult:
+        """
+        Run MCP server tools tests (alias for test_server with tools-specific options).
+        
+        Args:
+            test_config: Path to test configuration file or config dict
+            server_config: Path to server configuration file or config dict  
+            server_name: Name of server to test (required if multiple servers)
+            timeout: Test timeout in milliseconds
+            debug: Enable debug output
+            junit_xml: Generate JUnit XML output file
+            verbose: Enable verbose output
+            
+        Returns:
+            MCPTestResult: Test execution results
+            
+        Raises:
+            NodeJSNotFoundError: If Node.js is not installed
+            NPMPackageNotFoundError: If NPM package is not available
+            MCPTestExecutionError: If test execution fails
+            MCPConfigurationError: If configuration is invalid
+        """
+        # Map to test_server call with appropriate format
+        format = "junit" if junit_xml else "json"
+        output_file = junit_xml if junit_xml else None
+        
+        return self.test_server(
+            server_config=server_config,
+            test_config=test_config,
+            server_name=server_name,
+            timeout=timeout,
+            verbose=verbose or debug,
+            format=format,
+            output_file=output_file,
+        )
+
     def _prepare_config(
         self, config: Union[str, Path, Dict[str, Any]], config_type: str
     ) -> str:

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-server-tester"
-version = "1.0.0"
+version = "1.4.1"
 description = "Python wrapper for mcp-server-tester-sse-http-stdio NPM package"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -77,4 +77,4 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "--cov=mcp_server_tester --cov-report=html --cov-report=term-missing"
+addopts = "-v"

@@ -15,7 +15,7 @@ from .exceptions import MCPTesterError
 
 
 @click.group()
-@click.version_option(version="1.0.0")
+@click.version_option(version="1.4.1")
 def main() -> None:
     """Python wrapper for mcp-server-tester-sse-http-stdio NPM package."""
     pass
@@ -174,30 +174,34 @@ def docs():
         sys.exit(1)
 
 
-# DEPRECATED: Keep for backward compatibility
 @main.command()
+@click.argument("test_file")
 @click.option(
-    "--server-config", "-s", required=True, help="Path to server configuration file"
+    "--server-config", required=True, help="Path to server configuration file"
 )
 @click.option(
-    "--server-name", "-n", help="Name of server to test (required if multiple servers)"
+    "--server-name", help="Name of server to test (required if multiple servers)"
 )
-def tools(server_config: str, server_name: Optional[str]):
-    """
-    DEPRECATED: List available tools from MCP server.
-    Use 'test' command with tool discovery configuration instead.
-    """
-    import warnings
-    warnings.warn(
-        "The 'tools' command is deprecated. Use 'test' command with tool discovery tests instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
-    
+@click.option("--timeout", default=30000, help="Timeout in milliseconds")
+@click.option("--debug", is_flag=True, help="Enable debug output")
+@click.option("--junit-xml", help="Generate JUnit XML output file")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+def tools(test_file: str, server_config: str, server_name: Optional[str], timeout: int, debug: bool, junit_xml: Optional[str], verbose: bool):
+    """Run MCP server tools tests (direct API testing)."""
     try:
         tester = MCPTester()
-        tools_list = tester.list_tools(server_config, server_name)
-        click.echo(json.dumps(tools_list, indent=2))
+        result = tester.run_tools_test(
+            test_config=test_file,
+            server_config=server_config,
+            server_name=server_name,
+            timeout=timeout,
+            debug=debug,
+            junit_xml=junit_xml,
+            verbose=verbose,
+        )
+
+        click.echo(result.output)
+        sys.exit(0 if result.success else 1)
 
     except MCPTesterError as e:
         click.echo(f"Error: {e}", err=True)

@@ -19,7 +19,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="mcp-server-tester",
-    version="1.0.0",
+    version="1.4.1",
     author="MCP Server Tester Team",
     author_email="noreply@anthropic.com",
     description="Python wrapper for mcp-server-tester-sse-http-stdio NPM package",
