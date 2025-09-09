@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "crawl4ai": {
+      "transport": "http",
+      "url": "http://localhost:3000"
+    }
+  }
+}

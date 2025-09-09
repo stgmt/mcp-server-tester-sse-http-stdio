@@ -1,0 +1,60 @@
+# Graphiti MCP Server SSE Tests
+# Tests for Graphiti Knowledge Graph via Server-Sent Events
+
+tools:
+  expected_tool_list:
+    - add_memory
+    - search_memory_nodes
+    - search_memory_facts
+    - delete_entity_edge
+    - delete_episode
+    - get_entity_edge
+    - get_episodes
+    - clear_graph
+
+  tests:
+    # Basic memory operations
+    - name: Add simple text memory
+      tool: add_memory
+      params:
+        name: "Test Memory"
+        episode_body: "This is a test memory about AI development and Claude"
+        source: "text"
+        source_description: "Test data"
+      expect:
+        success: true
+
+    - name: Add JSON structured memory
+      tool: add_memory
+      params:
+        name: "JSON Test Memory"
+        episode_body: '{"company": {"name": "Test Corp"}, "products": [{"id": "P001", "name": "TestProduct"}]}'
+        source: "json"
+        source_description: "CRM test data"
+      expect:
+        success: true
+
+    # Search operations
+    - name: Search for nodes
+      tool: search_memory_nodes
+      params:
+        query: "AI development Claude"
+        max_nodes: 5
+      expect:
+        success: true
+
+    - name: Search for facts
+      tool: search_memory_facts
+      params:
+        query: "test company products"
+        max_facts: 10
+      expect:
+        success: true
+
+    # Episode retrieval
+    - name: Get recent episodes
+      tool: get_episodes
+      params:
+        last_n: 3
+      expect:
+        success: true

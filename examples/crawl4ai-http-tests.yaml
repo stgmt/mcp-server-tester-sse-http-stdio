@@ -1,0 +1,36 @@
+tools:
+  expected_tool_list:
+    - md
+    - html
+    - screenshot
+    - pdf
+    - execute_js
+    - crawl
+    
+  tests:
+    - name: Test md tool - Convert page to Markdown
+      tool: md
+      params:
+        url: "https://example.com"
+      expect:
+        success: true
+        result:
+          contains: "Example Domain"
+    
+    - name: Test html tool - Get HTML content
+      tool: html
+      params:
+        url: "https://example.com"
+      expect:
+        success: true
+        result:
+          contains: "<!DOCTYPE html>"
+    
+    - name: Test crawl tool - Advanced crawling
+      tool: crawl
+      params:
+        url: "https://example.com"
+        screenshot: false
+        wait_for: 2
+      expect:
+        success: true

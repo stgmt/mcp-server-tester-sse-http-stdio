@@ -1,0 +1,89 @@
+# Crawl4AI MCP Server STDIO Tests
+# Tests for Crawl4AI via STDIO transport (local process)
+
+tools:
+  expected_tool_list:
+    - md
+    - html
+    - screenshot
+    - pdf
+    - execute_js
+    - crawl
+    
+  tests:
+    # Basic functionality tests
+    - name: Test md tool - Convert to Markdown via STDIO
+      tool: md
+      params:
+        url: "https://example.com"
+      expect:
+        success: true
+        result:
+          contains: "Example Domain"
+    
+    - name: Test html tool - Get HTML via STDIO
+      tool: html
+      params:
+        url: "https://example.com"
+      expect:
+        success: true
+        result:
+          contains: "<!DOCTYPE html>"
+    
+    - name: Test screenshot tool - Capture screenshot via STDIO
+      tool: screenshot
+      params:
+        url: "https://example.com"
+      expect:
+        success: true
+        result:
+          contains: "Screenshot captured"
+    
+    - name: Test pdf tool - Convert to PDF via STDIO
+      tool: pdf
+      params:
+        url: "https://example.com"
+      expect:
+        success: true
+        result:
+          contains: "PDF generated"
+    
+    - name: Test execute_js - Run JavaScript via STDIO
+      tool: execute_js
+      params:
+        url: "https://example.com"
+        js_code: "return document.title;"
+      expect:
+        success: true
+        result:
+          contains: "Example Domain"
+    
+    - name: Test crawl tool - Advanced crawling via STDIO
+      tool: crawl
+      params:
+        url: "https://example.com"
+        screenshot: false
+        wait_for: 2
+        remove_images: true
+      expect:
+        success: true
+        result:
+          contains: "markdown"
+
+    # Error handling tests
+    - name: Test invalid URL
+      tool: md
+      params:
+        url: "not-a-valid-url"
+      expect:
+        success: false
+        error:
+          contains: "Invalid URL"
+    
+    - name: Test missing parameters
+      tool: crawl
+      params: {}
+      expect:
+        success: false
+        error:
+          contains: "required"
