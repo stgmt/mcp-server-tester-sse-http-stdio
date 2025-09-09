@@ -1,4 +1,4 @@
-# MCP Server Tester - Universal Testing Tool for Model Context Protocol Servers
+# MCP Server Tester - Universal Testing Tool for Model Context Protocol
 
 [![License: Non-Commercial](https://img.shields.io/badge/License-Non--Commercial-orange.svg)](./LICENSE-COMMERCIAL)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
@@ -7,9 +7,27 @@
 [![Test Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/pulls)
 
-**The most comprehensive MCP (Model Context Protocol) server testing tool** supporting HTTP REST APIs, Server-Sent Events (SSE), and STDIO process communication. Built for testing AI/LLM tools, Anthropic Claude MCP servers, OpenAI-compatible APIs, and custom implementations. Features YAML test configuration, TypeScript type safety, and extensive transport protocol support.
+**The most comprehensive MCP (Model Context Protocol) server testing tool** supporting HTTP REST APIs, Server-Sent Events (SSE), and STDIO process communication. Built for testing AI/LLM tools, Anthropic Claude MCP servers, OpenAI-compatible APIs, and custom implementations.
 
-## 🚀 Why MCP Server Tester SSE-HTTP-STDIO?
+---
+
+## 📑 Table of Contents
+
+- [Why This Tool?](#-why-this-tool)
+- [Quick Start](#-quick-start)
+- [Installation](#-installation)
+- [Usage Examples](#-usage-examples)
+- [Configuration](#-configuration)
+- [Features](#-features)
+- [Architecture](#-architecture)
+- [Troubleshooting](#-troubleshooting)
+- [API Reference](#-api-reference)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## 🎯 Why This Tool?
 
 ### The Problem
 - 🔴 **Self-written test scripts** - Every team reinvents the wheel with custom scripts
@@ -21,344 +39,286 @@
 ### Our Solution
 - ✅ **Professional architecture** - Well-designed, extensible testing framework
 - ✅ **All MCP protocols** - Complete support for every existing MCP transport
-- ✅ **Declarative YAML tests** - Describe test scenarios and steps following BDD best practices
-- ✅ **Scenario-based testing** - Write tests as user stories with clear Given-When-Then structure
-- ✅ **Real SSE support** - Not just HTTP POST, but actual EventSource protocol
-- ✅ **TypeScript safety** - Catch errors at compile time, not in production
-- ✅ **Zero custom scripts** - Replace hundreds of lines of custom code with readable YAML scenarios
-- ✅ **One-line execution** - Just run `npx tsx src/cli.ts tools test.yaml --server-config server.json`
-- ✅ **CI/CD ready** - JUnit XML output for integration with any pipeline
+- ✅ **Declarative YAML tests** - Describe test scenarios following BDD best practices
+- ✅ **Scenario-based testing** - Write tests as user stories with Given-When-Then structure
+- ✅ **Real SSE support** - Native EventSource protocol, not just HTTP POST
+- ✅ **TypeScript safety** - Catch errors at compile time
+- ✅ **One-line execution** - `npx tsx src/cli.ts tools test.yaml --server-config server.json`
+- ✅ **CI/CD ready** - JUnit XML output for any pipeline
 
-## 📋 Quick Facts
-
-| Aspect | Details |
-|--------|---------|
-| **Purpose** | Test MCP servers across all transport types |
-| **Protocols** | HTTP, SSE (EventSource), STDIO (Process IPC) |
-| **Language** | TypeScript with full type safety |
-| **Config Format** | YAML for human-readable tests |
-| **Compatible With** | Anthropic Claude, OpenAI, Custom MCP servers |
-| **Package Manager** | npm, npx, yarn |
-| **License** | MIT |
-| **Test Speed** | ~100ms per test |
-| **Memory Usage** | < 50MB |
-| **Bundle Size** | < 2MB |
-
-## 🤔 What is MCP?
-
-Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context to LLMs. It enables:
-- 🔧 Standardized tool interfaces for AI agents
-- 🔌 Consistent server-to-client communication
-- 🧪 Unified testing approaches across implementations
-
-This tester helps you validate that your MCP server correctly implements the protocol.
-
-## 🌟 Features
-
-- ✅ **HTTP Transport** - Test traditional HTTP-based MCP servers (POST requests)
-- ✅ **SSE Transport** - Test SSE-based MCP servers (Server-Sent Events with GET)
-- ✅ **STDIO Transport** - Test local MCP servers (process communication)
-- 📝 **YAML Test Format** - Simple and readable test configuration
-- 🎯 **Comprehensive Testing** - Tools, evals, and compliance testing
-- 🔧 **TypeScript** - Full type safety and modern tooling
-
-## 📋 Requirements
-
-- Node.js >= 18.0.0
-- npm >= 8.0.0  
-- Python 3.8+ (for STDIO servers, optional)
-
-## 📦 Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/stgmt/mcp-server-tester-sse-http-stdio.git
-cd mcp-server-tester-sse-http-stdio
-
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-```
+---
 
 ## 🚀 Quick Start
 
-### Testing HTTP MCP Server (Crawl4AI)
-
 ```bash
-# Run tests for HTTP-based MCP server
+# Install globally
+npm install -g mcp-server-tester-sse-http-stdio
+
+# Or use directly with npx
+npx mcp-server-tester-sse-http-stdio tools test.yaml --server-config server.json
+```
+
+### Test Any Transport in Seconds
+
+**HTTP:**
+```bash
 npx tsx src/cli.ts tools examples/crawl4ai-http-tests.yaml \
   --server-config examples/crawl4ai-http-config.json
 ```
 
-### Testing SSE MCP Server (Graphiti)
-
+**SSE:**
 ```bash
-# Run tests for SSE-based MCP server
 npx tsx src/cli.ts tools examples/graphiti-sse-tests.yaml \
   --server-config examples/graphiti-sse-config.json
 ```
 
-### Testing STDIO MCP Server (Local Process)
-
+**STDIO:**
 ```bash
-# Run tests for STDIO-based MCP server
 npx tsx src/cli.ts tools examples/crawl4ai-stdio-tests.yaml \
   --server-config examples/crawl4ai-stdio-config.json
 ```
 
-## 📝 Configuration Examples
+---
 
-### HTTP Transport (Crawl4AI)
+## 📦 Installation
 
-**Server config** (`crawl4ai-http-config.json`):
-```json
-{
-  "mcpServers": {
-    "crawl4ai": {
-      "transport": "http",
-      "url": "http://localhost:3000"
-    }
-  }
-}
+### Requirements
+- Node.js >= 18.0.0
+- npm >= 8.0.0  
+- Python 3.8+ (optional, for STDIO servers)
+
+### From Source
+```bash
+git clone https://github.com/stgmt/mcp-server-tester-sse-http-stdio.git
+cd mcp-server-tester-sse-http-stdio
+npm install
+npm run build
 ```
 
-**Test file** (`crawl4ai-http-tests.yaml`):
+### From NPM (when published)
+```bash
+npm install -g mcp-server-tester-sse-http-stdio
+```
+
+---
+
+## 📝 Usage Examples
+
+### Basic Test Structure
+
+**YAML Test File:**
 ```yaml
 tools:
   expected_tool_list:
-    - md
-    - html
-    - screenshot
-    - pdf
-    - execute_js
-    - crawl
+    - tool_name_1
+    - tool_name_2
     
   tests:
-    - name: Test md tool
-      tool: md
+    - name: Test scenario description
+      tool: tool_name
       params:
-        url: "https://example.com"
+        param1: value1
       expect:
         success: true
         result:
-          contains: "Example Domain"
+          contains: "expected text"
 ```
 
-### SSE Transport (Graphiti)
-
-**Server config** (`graphiti-sse-config.json`):
+**Server Configuration:**
 ```json
 {
   "mcpServers": {
-    "graphiti": {
-      "transport": "sse",
-      "url": "http://localhost:8001/sse"
+    "server_name": {
+      "transport": "http|sse|stdio",
+      "url": "http://localhost:3000",     // for HTTP/SSE
+      "command": "python",                 // for STDIO
+      "args": ["server.py", "--stdio"]     // for STDIO
     }
   }
 }
 ```
 
-**Test file** (`graphiti-sse-tests.yaml`):
-```yaml
-tools:
-  expected_tool_list:
-    - add_memory
-    - search_memory_nodes
-    - search_memory_facts
-    
-  tests:
-    - name: Add memory
-      tool: add_memory
-      params:
-        name: "Test Memory"
-        episode_body: "Test content"
-      expect:
-        success: true
-```
+---
 
-### STDIO Transport (Local Process)
+## ⚙️ Configuration
 
-**Server config** (`crawl4ai-stdio-config.json`):
-```json
-{
-  "mcpServers": {
-    "crawl4ai": {
-      "transport": "stdio",
-      "command": "python",
-      "args": ["/path/to/server.py", "--stdio"],
-      "env": {
-        "API_KEY": "your-key"
-      }
-    }
-  }
-}
-```
+### Transport Types
 
-**Test file** (`crawl4ai-stdio-tests.yaml`):
-```yaml
-tools:
-  expected_tool_list:
-    - md
-    - html
-    
-  tests:
-    - name: Test via STDIO
-      tool: md
-      params:
-        url: "https://example.com"
-      expect:
-        success: true
-```
-
-## 🛠️ Advanced Usage
+| Transport | Use Case | Configuration |
+|-----------|----------|---------------|
+| **HTTP** | REST APIs | `"transport": "http", "url": "..."` |
+| **SSE** | Real-time streaming | `"transport": "sse", "url": "..."` |
+| **STDIO** | Local processes | `"transport": "stdio", "command": "..."` |
 
 ### Command Line Options
 
 ```bash
-npx tsx src/cli.ts tools <test-file> [options]
-
 Options:
-  --server-config <file>   MCP server configuration file (required)
-  --server-name <name>     Specific server name from config
-  --timeout <ms>           Test timeout in milliseconds (default: 10000)
+  --server-config <file>   MCP server configuration (required)
+  --server-name <name>     Specific server from config
+  --timeout <ms>           Test timeout (default: 10000)
   --debug                  Enable debug output
-  --junit-xml [filename]   Generate JUnit XML output
-  -t, --transport <type>   Transport type: stdio|http|sse
-  -u, --url <url>          Server URL for HTTP/SSE transport
+  --junit-xml [filename]   Generate JUnit XML report
+  -t, --transport <type>   Override transport type
+  -u, --url <url>          Override server URL
 ```
 
-### Running Tests
+---
 
-```bash
-# Run unit tests
-npm test
+## ✨ Features
 
-# Run with coverage
-npm run test:coverage
+### Core Capabilities
+- 🔧 **Universal Protocol Support** - HTTP, SSE, STDIO in one tool
+- 📝 **YAML Test Scenarios** - Human-readable test definitions
+- 🎯 **BDD Testing** - Given-When-Then test structure
+- 🔍 **TypeScript** - Full type safety and IntelliSense
+- 📊 **Test Reports** - Console, JSON, JUnit XML formats
+- 🚀 **CI/CD Integration** - Jenkins, GitHub Actions, GitLab CI
 
-# Development mode
-npm run dev
-```
+### Test Types
+- **Tools Testing** - Validate tool discovery and execution
+- **Compliance Testing** - Protocol compliance verification
+- **Eval Testing** - LLM-based evaluation tests
+- **Integration Testing** - End-to-end scenarios
+
+---
 
 ## 🏗️ Architecture
 
-### 🔄 Transport Comparison
+### System Overview
+
+```
+┌─────────────────┐
+│   YAML Tests    │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│   Test Runner   │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│  MCP Client     │
+└────────┬────────┘
+         │
+    ┌────┴────┬──────────┐
+    ▼         ▼          ▼
+┌──────┐  ┌─────┐  ┌───────┐
+│ HTTP │  │ SSE │  │ STDIO │
+└──────┘  └─────┘  └───────┘
+```
+
+### Transport Comparison
 
 | Feature | HTTP | SSE | STDIO |
 |---------|------|-----|-------|
 | **Protocol** | REST API | EventSource | Process IPC |
 | **Connection** | Stateless | Persistent | Direct |
-| **Use Case** | Web APIs | Real-time updates | Local tools |
 | **Performance** | Medium | High | Highest |
 | **Debugging** | Easy | Medium | Hard |
 | **Scalability** | High | Medium | Low |
 
-## 🆚 Comparison with Alternatives
+### vs Alternatives
 
 | Feature | Our Tool | MCP Inspector | Manual Testing | Custom Scripts |
 |---------|----------|---------------|----------------|----------------|
 | SSE Support | ✅ Native | ❌ Limited | ❌ Complex | ⚠️ DIY |
 | STDIO Testing | ✅ Full | ⚠️ Partial | ✅ Possible | ✅ Possible |
-| HTTP Testing | ✅ Complete | ✅ Yes | ✅ Yes | ✅ Yes |
 | YAML Config | ✅ Yes | ❌ No | ❌ No | ❌ No |
 | TypeScript | ✅ Full | ⚠️ Partial | ❌ No | ⚠️ Optional |
-| CLI Tool | ✅ Yes | ❌ GUI only | ❌ N/A | ⚠️ DIY |
-| CI/CD Ready | ✅ JUnit XML | ❌ No | ❌ No | ⚠️ DIY |
-| Learning Curve | ✅ Easy | ⚠️ Medium | ❌ Hard | ❌ Hard
+| CI/CD Ready | ✅ JUnit | ❌ No | ❌ No | ⚠️ DIY |
 
-The tester supports three transport types:
-
-1. **STDIO** - Direct process communication via stdin/stdout
-2. **HTTP** - RESTful HTTP POST requests for stateless operations
-3. **SSE** - Server-Sent Events with GET requests for real-time streaming
-
-### SSE Transport Implementation
-
-The SSE transport uses:
-- GET requests to establish EventSource connection
-- Server-Sent Events for bidirectional communication
-- Automatic reconnection handling
-- Message queuing and ordering
-
-## 🧪 Testing Your Own MCP Server
-
-1. Create a server config file with your server details
-2. Write YAML tests for your server's tools
-3. Run the tester with your config and tests
-
-Example:
-```bash
-npx tsx src/cli.ts tools my-tests.yaml --server-config my-server.json
-```
-
-## ⚡ Performance
-
-- **Test Execution**: ~100ms per test
-- **Memory Usage**: < 50MB for typical test suites
-- **Startup Time**: < 1 second
-- **Supported Node**: 18.0+ for optimal performance
-- **Bundle Size**: < 2MB (minified)
-- **Test Coverage**: 95%+ code coverage
-- **Concurrent Tests**: Support for parallel test execution
-- **Protocol Overhead**: Minimal (~5ms for STDIO, ~20ms for HTTP/SSE)
+---
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-**Problem**: "Cannot find module '@modelcontextprotocol/sdk'"  
-**Solution**: Run `npm install` in the project directory
+| Problem | Solution |
+|---------|----------|
+| "Cannot find module '@modelcontextprotocol/sdk'" | Run `npm install` |
+| "MCP error -32000: Connection closed" | Check server is running and URL is correct |
+| "Server's protocol version not supported" | Use protocol version "2024-11-05" |
+| "Tool not found" | Verify exact tool name (case-sensitive) |
 
-**Problem**: "MCP error -32000: Connection closed"  
-**Solution**: Check that your server is running and the path/URL is correct
+### Debug Mode
 
-**Problem**: "Server's protocol version is not supported"  
-**Solution**: Ensure your server uses protocol version "2024-11-05"
-
-**Problem**: "Tool not found" error  
-**Solution**: Verify the tool name matches exactly (case-sensitive)
-
-## 📚 Documentation
-
-- [Model Context Protocol](https://modelcontextprotocol.io)
-- [Anthropic MCP Documentation](https://docs.anthropic.com/mcp)
-- [Graphiti Knowledge Graph](https://github.com/getzep/graphiti)
-- [Crawl4AI](https://github.com/unclecode/crawl4ai)
-
-## 🏆 Used By
-
-- 🤖 **AI/LLM developers** testing tool integrations
-- 🔧 **MCP server implementers** validating protocols
-- 🧪 **QA teams** automating MCP testing
-- 📚 **Researchers** exploring Model Context Protocol
-- 🏢 **Enterprise teams** building production MCP servers
-- 🎓 **Educational institutions** teaching protocol testing
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🔗 Links
-
-- **Telegram Channel**: [@ii_pomogator](https://t.me/ii_pomogator) - AI помощник для разработчиков
-- **NPM Package**: [mcp-server-tester-sse-http-stdio](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
-- **GitHub Issues**: [Report bugs or request features](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/issues)
+```bash
+# Enable detailed logging
+npx tsx src/cli.ts tools test.yaml --server-config server.json --debug
+```
 
 ---
 
-## ⭐ Support the Project
+## 📚 API Reference
 
-If this tool helps your MCP development:
-- ⭐ **Star** this repo (it really helps!)
+### Test Runner API
+
+```typescript
+import { CapabilitiesTestRunner } from './commands/tools/runner.js';
+
+const runner = new CapabilitiesTestRunner(
+  toolsConfig,
+  options,
+  displayManager
+);
+
+const result = await runner.run();
+```
+
+### Custom Transport Implementation
+
+```typescript
+class CustomTransport implements McpTransport {
+  async connect(): Promise<void> { /* ... */ }
+  async sendRequest(method: string, params: any): Promise<any> { /* ... */ }
+  async close(): Promise<void> { /* ... */ }
+}
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Development setup
+- Code style guidelines  
+- Testing requirements
+- Pull request process
+
+### Development Commands
+
+```bash
+npm run dev          # Development mode
+npm test            # Run tests
+npm run lint        # Check code style
+npm run build       # Production build
+```
+
+---
+
+## 📄 License
+
+**Non-Commercial Use License** - see [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL)
+
+For commercial licensing, contact the author.
+
+---
+
+## 🔗 Links
+
+- 📦 [NPM Package](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
+- 🐛 [Issue Tracker](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/issues)
+- 💬 [Telegram Channel](https://t.me/ii_pomogator)
+- 📖 [MCP Documentation](https://modelcontextprotocol.io)
+
+---
+
+## ⭐ Support
+
+If this tool helps your development:
+- ⭐ **Star** this repository
 - 🔄 **Share** with your team
-- 🐛 **Report** issues you find
+- 🐛 **Report** issues
 - 🤝 **Contribute** improvements
-- 📢 **Tweet** about your experience
 
-Every star makes the project more visible to developers who need it!
+Every star helps others discover this tool!
