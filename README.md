@@ -50,33 +50,132 @@
 
 ## 🚀 Quick Start
 
+### 1. Create test file (test.yaml)
+```yaml
+tools:
+  tests:
+    - name: Test server status
+      tool: get_status
+      params: {}
+      expect:
+        success: true
+        result:
+          contains: "status"
+```
+
+### 2. Create server config (server.json)  
+```json
+{
+  "mcpServers": {
+    "my-server": {
+      "transport": "sse",
+      "url": "http://localhost:8001/sse"
+    }
+  }
+}
+```
+
+### 3. Run tests
 ```bash
 # Install globally
 npm install -g mcp-server-tester-sse-http-stdio
 
-# Or use directly with npx
-npx mcp-server-tester-sse-http-stdio tools test.yaml --server-config server.json
+# Run tests (✅ ALWAYS specify --server-name!)
+npx mcp-server-tester-sse-http-stdio tools test.yaml --server-config server.json --server-name my-server
 ```
+
+✅ **Server must be running** on specified URL for tests to pass!
 
 ### Test Any Transport in Seconds
 
 **HTTP:**
 ```bash
-npx tsx src/cli.ts tools examples/crawl4ai-http-tests.yaml \
-  --server-config examples/crawl4ai-http-config.json
+npx mcp-server-tester-sse-http-stdio tools examples/crawl4ai-http-tests.yaml \
+  --server-config examples/crawl4ai-http-config.json --server-name crawl4ai
 ```
 
 **SSE:**
 ```bash
-npx tsx src/cli.ts tools examples/graphiti-sse-tests.yaml \
-  --server-config examples/graphiti-sse-config.json
+npx mcp-server-tester-sse-http-stdio tools examples/graphiti-sse-tests.yaml \
+  --server-config examples/graphiti-sse-config.json --server-name graphiti
 ```
 
 **STDIO:**
 ```bash
-npx tsx src/cli.ts tools examples/crawl4ai-stdio-tests.yaml \
-  --server-config examples/crawl4ai-stdio-config.json
+npx mcp-server-tester-sse-http-stdio tools examples/crawl4ai-stdio-tests.yaml \
+  --server-config examples/crawl4ai-stdio-config.json --server-name crawl4ai
 ```
+
+---
+
+## 🚨 Common Pitfalls
+
+### Multiple servers in config
+❌ **Wrong:**
+```bash
+npx mcp-server-tester-sse-http-stdio tools test.yaml --server-config server.json
+# Error: Multiple servers found, please specify server name
+```
+
+✅ **Correct:**
+```bash
+npx mcp-server-tester-sse-http-stdio tools test.yaml --server-config server.json --server-name graphiti
+```
+
+### Server config format  
+❌ **Wrong** (copying from MCP client configs):
+```json
+{
+  "mcpServers": {
+    "graphiti": {
+      "transport": "sse",
+      "url": "http://localhost:8001/sse",
+      "description": "My server",  // ❌ Not supported
+      "timeout": 30000             // ❌ Not supported
+    }
+  }
+}
+```
+
+✅ **Correct** (minimal format):
+```json
+{
+  "mcpServers": {
+    "graphiti": {
+      "transport": "sse",
+      "url": "http://localhost:8001/sse"
+    }
+  }
+}
+```
+
+### Test result expectations
+❌ **Wrong:**
+```yaml
+expect:
+  success: true
+  result:
+    matches: true  # ❌ Not supported
+```
+
+✅ **Correct:**
+```yaml
+expect:
+  success: true
+  result:
+    contains: "expected text"  # ✅ or use 'equals'
+```
+
+### Server not running
+❌ **Error:**
+```
+Error: Failed to connect: ECONNREFUSED 127.0.0.1:8001
+```
+
+✅ **Solution:**
+1. Start your MCP server first
+2. Verify server is accessible: `curl http://localhost:8001/health`
+3. Check server URL in config matches actual server
 
 ---
 
