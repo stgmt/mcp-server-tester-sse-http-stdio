@@ -2,12 +2,16 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
+[![Python Version](https://img.shields.io/badge/python-%3E%3D3.8-blue)](https://www.python.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![npm version](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
+[![PyPI version](https://img.shields.io/pypi/v/mcp-server-tester)](https://pypi.org/project/mcp-server-tester/)
 [![Test Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/pulls)
 
 **The most comprehensive MCP (Model Context Protocol) server testing tool** supporting HTTP REST APIs, Server-Sent Events (SSE), and STDIO process communication. Built for testing AI/LLM tools, Anthropic Claude MCP servers, OpenAI-compatible APIs, and custom implementations.
+
+🐍 **Now available for Python!** - Use the same powerful testing capabilities from Python applications with our [Python wrapper](python-wrapper/README.md).
 
 ---
 
@@ -15,10 +19,13 @@
 
 - [Why This Tool?](#-why-this-tool)
 - [Quick Start](#-quick-start)
+  - [Node.js/TypeScript](#nodejs-typescript)
+  - [Python](#python)
 - [Installation](#-installation)
 - [Usage Examples](#-usage-examples)
 - [Configuration](#-configuration)
 - [Features](#-features)
+- [Python Wrapper](#-python-wrapper)
 - [Architecture](#-architecture)
 - [Troubleshooting](#-troubleshooting)
 - [API Reference](#-api-reference)
@@ -50,7 +57,9 @@
 
 ## 🚀 Quick Start
 
-### 1. Create test file (test.yaml)
+### Node.js/TypeScript
+
+#### 1. Create test file (test.yaml)
 ```yaml
 tools:
   tests:
@@ -63,7 +72,7 @@ tools:
           contains: "status"
 ```
 
-### 2. Create server config (server.json)  
+#### 2. Create server config (server.json)  
 ```json
 {
   "mcpServers": {
@@ -75,7 +84,7 @@ tools:
 }
 ```
 
-### 3. Run tests
+#### 3. Run tests
 ```bash
 # Install globally
 npm install -g mcp-server-tester-sse-http-stdio
@@ -86,7 +95,7 @@ npx mcp-server-tester-sse-http-stdio tools test.yaml --server-config server.json
 
 ✅ **Server must be running** on specified URL for tests to pass!
 
-### Test Any Transport in Seconds
+#### Test Any Transport in Seconds
 
 **HTTP:**
 ```bash
@@ -105,6 +114,44 @@ npx mcp-server-tester-sse-http-stdio tools examples/graphiti-sse-tests.yaml \
 npx mcp-server-tester-sse-http-stdio tools examples/crawl4ai-stdio-tests.yaml \
   --server-config examples/crawl4ai-stdio-config.json --server-name crawl4ai
 ```
+
+### Python
+
+#### 1. Install Python wrapper
+```bash
+# Install from PyPI (requires Node.js + NPM package)
+pip install mcp-server-tester
+npm install -g mcp-server-tester-sse-http-stdio
+```
+
+#### 2. Python API usage
+```python
+from mcp_server_tester import MCPTester
+
+# Initialize tester
+tester = MCPTester()
+
+# Test with configuration files
+result = tester.test_server(
+    server_config="server.json",
+    test_config="test.yaml",
+    server_name="my-server"
+)
+
+print(f"✅ Tests passed: {result.passed_tests}/{result.total_tests}")
+```
+
+#### 3. Python CLI usage
+```bash
+# Same commands as Node.js version
+mcp-server-tester test --server-config server.json --test test.yaml --server-name my-server
+
+# Python-specific features
+mcp-server-tester doctor  # Check system dependencies
+mcp-server-tester create-server-config  # Interactive config creation
+```
+
+📚 **Full Python documentation**: [python-wrapper/README.md](python-wrapper/README.md)
 
 ---
 
@@ -279,6 +326,58 @@ Options:
 - **Compliance Testing** - Protocol compliance verification
 - **Eval Testing** - LLM-based evaluation tests
 - **Integration Testing** - End-to-end scenarios
+
+---
+
+## 🐍 Python Wrapper
+
+The Python wrapper provides a native Python interface to the MCP Server Tester, making it easy to integrate MCP testing into Python applications and workflows.
+
+### Key Features
+- **🔧 Python API** - Native Python classes and methods
+- **📦 PyPI Package** - Easy installation with `pip install mcp-server-tester`  
+- **🛠️ CLI Commands** - Same powerful CLI, Python-style
+- **🧪 Unit Tested** - Comprehensive test coverage with pytest
+- **📚 Type Hints** - Full mypy support for better IDE experience
+- **🚀 CI/CD Ready** - GitHub Actions for automatic PyPI publishing
+
+### Python vs Node.js
+| Feature | Node.js Version | Python Wrapper |
+|---------|----------------|-----------------|
+| **Installation** | `npm install -g mcp-server-tester-sse-http-stdio` | `pip install mcp-server-tester` |
+| **CLI Usage** | `npx mcp-server-tester-sse-http-stdio` | `mcp-server-tester` |
+| **API Usage** | TypeScript/JavaScript | Python classes |
+| **Dependencies** | Node.js 18+ | Python 3.8+ + Node.js |
+| **Test Framework** | vitest | pytest |
+
+### Quick Example
+```python
+from mcp_server_tester import MCPTester
+
+# Test with dictionaries (no files needed)
+server_config = {
+    "mcpServers": {
+        "my-server": {
+            "transport": "sse", 
+            "url": "http://localhost:8001/sse"
+        }
+    }
+}
+
+test_config = {
+    "tools": {
+        "tests": [
+            {"name": "basic-test", "calls": [{"tool": "list_files"}]}
+        ]
+    }
+}
+
+tester = MCPTester()
+result = tester.test_server(server_config, test_config, server_name="my-server")
+print(f"✅ {result.passed_tests}/{result.total_tests} tests passed!")
+```
+
+📚 **Full Documentation**: [python-wrapper/README.md](python-wrapper/README.md)
 
 ---
 
