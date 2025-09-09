@@ -14,7 +14,7 @@ from .exceptions import MCPTesterError, NodeJSNotFoundError, NPMPackageNotFoundE
 
 __all__ = [
     "MCPTester",
-    "MCPTestResult", 
+    "MCPTestResult",
     "MCPTestConfig",
     "MCPTesterError",
     "NodeJSNotFoundError",
