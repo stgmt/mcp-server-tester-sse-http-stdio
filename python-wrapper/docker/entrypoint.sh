@@ -26,7 +26,7 @@ header() { echo -e "${PURPLE}🐳 $1${NC}"; }
 
 # Показать информацию о контейнере
 show_container_info() {
-    header "MCP Server Tester Docker Container v1.0.0"
+    header "MCP Server Tester Docker Container v1.4.1"
     echo
     echo "📦 Доступные инструменты:"
     echo "  • Node.js: $(node --version)"
