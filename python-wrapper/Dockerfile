@@ -51,8 +51,8 @@ COPY pyproject.toml ./
 COPY README.md ./
 
 # Установка Python зависимостей и пакета (обходим ограничения Alpine)
-RUN pip3 install --break-system-packages --no-cache-dir -r requirements.txt && \
-    pip3 install --break-system-packages -e .
+RUN pip3 install --break-system-packages --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt && \
+    pip3 install --break-system-packages --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -e .
 
 # Создание entrypoint скрипта
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
