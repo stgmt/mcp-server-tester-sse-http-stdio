@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'python-wrapper/README.md'
-      - 'python-wrapper/DOCKER_HUB_DESCRIPTION.md'
       - '.github/workflows/dockerhub-description.yml'
 
 jobs:
@@ -22,6 +21,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: stgmt/mcp-server-tester
-          readme-filepath: ./python-wrapper/DOCKER_HUB_DESCRIPTION.md
+          readme-filepath: ./python-wrapper/README.md
           short-description: "Universal framework for programmatic unit/integration testing of MCP servers across all protocols"
           enable-url-completion: true
