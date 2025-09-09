@@ -2,6 +2,8 @@
 
 **Универсальный фреймворк для программируемого unit и integration тестирования MCP (Model Context Protocol) серверов всех доступных протоколов.**
 
+> **Docker Hub**: Comprehensive testing framework supporting HTTP, SSE, and STDIO protocols with multi-platform Docker images (AMD64/ARM64).
+
 🔗 **GitHub Repository**: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
 
 [![Python Package](https://img.shields.io/pypi/v/mcp-server-tester)](https://pypi.org/project/mcp-server-tester/)

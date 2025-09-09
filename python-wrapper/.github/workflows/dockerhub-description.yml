@@ -1,0 +1,27 @@
+name: Update Docker Hub Description
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'python-wrapper/README.md'
+      - 'python-wrapper/DOCKER_HUB_DESCRIPTION.md'
+      - '.github/workflows/dockerhub-description.yml'
+
+jobs:
+  dockerHubDescription:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Docker Hub Description
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: stgmt/mcp-server-tester
+          readme-filepath: ./python-wrapper/DOCKER_HUB_DESCRIPTION.md
+          short-description: "Universal framework for programmatic unit/integration testing of MCP servers across all protocols"
+          enable-url-completion: true
