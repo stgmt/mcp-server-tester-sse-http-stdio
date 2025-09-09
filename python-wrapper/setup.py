@@ -2,6 +2,11 @@
 
 """
 Setup script for mcp-server-tester Python wrapper.
+
+🔗 GitHub Repository: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
+📦 NPM Package: https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio
+🐍 PyPI Package: https://pypi.org/project/mcp-server-tester/
+🐳 Docker Hub: https://hub.docker.com/r/stgmt/mcp-server-tester
 """
 
 from setuptools import setup, find_packages

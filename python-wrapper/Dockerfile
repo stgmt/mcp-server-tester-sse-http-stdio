@@ -1,5 +1,10 @@
 # 🐳 MCP Server Tester - Universal Docker Image
 # 
+# 🔗 GitHub Repository: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
+# 📦 NPM Package: https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio
+# 🐍 PyPI Package: https://pypi.org/project/mcp-server-tester/
+# 🐳 Docker Hub: https://hub.docker.com/r/stgmt/mcp-server-tester
+# 
 # Поддерживает все 3 способа использования:
 # 1. NPM пакет (Node.js/TypeScript)
 # 2. Python пакет 
@@ -14,6 +19,9 @@ FROM node:20-alpine
 LABEL maintainer="MCP Server Tester Team"
 LABEL version="1.0.0" 
 LABEL description="Universal MCP Server Tester with NPM, Python, and Docker support"
+LABEL org.opencontainers.image.source="https://github.com/stgmt/mcp-server-tester-sse-http-stdio"
+LABEL org.opencontainers.image.url="https://github.com/stgmt/mcp-server-tester-sse-http-stdio"
+LABEL org.opencontainers.image.documentation="https://github.com/stgmt/mcp-server-tester-sse-http-stdio#readme"
 
 # Установка системных зависимостей
 RUN apk add --no-cache \

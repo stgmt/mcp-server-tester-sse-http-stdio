@@ -2,9 +2,12 @@
 
 **Универсальный фреймворк для программируемого unit и integration тестирования MCP (Model Context Protocol) серверов всех доступных протоколов.**
 
+🔗 **GitHub Repository**: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
+
 [![Python Package](https://img.shields.io/pypi/v/mcp-server-tester)](https://pypi.org/project/mcp-server-tester/)
 [![Docker Image](https://img.shields.io/docker/v/stgmt/mcp-server-tester)](https://hub.docker.com/r/stgmt/mcp-server-tester)
 [![NPM Package](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
+[![GitHub](https://img.shields.io/github/stars/stgmt/mcp-server-tester-sse-http-stdio?style=social)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio)
 
 ## 🎯 Что это такое?
 
