@@ -1,0 +1,272 @@
+{
+  "tools": {
+    "description": "[test-file]  Run MCP server tools tests (direct API testing).",
+    "options": [
+      {
+        "option": "--server-config",
+        "description": "MCP server configuration file (JSON)",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--server-name",
+        "description": "Specific server name to use from config (if multiple",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--timeout",
+        "description": "Test timeout in milliseconds (default: \"10000\")",
+        "required": false,
+        "has_value": true,
+        "default": "\"10000\""
+      },
+      {
+        "option": "--debug",
+        "description": "Enable debug output with additional details",
+        "required": false,
+        "has_value": false,
+        "default": null
+      },
+      {
+        "option": "--junit-xml",
+        "description": "[filename]  Generate JUnit XML output (default: junit.xml)",
+        "required": false,
+        "has_value": false,
+        "default": "junit.xml"
+      },
+      {
+        "option": "--transport",
+        "description": "Transport type: stdio|http",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--url",
+        "description": "Server URL for HTTP transport",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Run MCP server tools tests (direct API testing). Use \"mcp-server-tester schema\"",
+    "examples": []
+  },
+  "Use": {
+    "description": "\"mcp-server-tester schema\" to see test file",
+    "options": [
+      {
+        "option": "--version",
+        "description": "output the version number",
+        "required": false,
+        "has_value": false,
+        "default": null
+      },
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Standalone CLI tool for testing MCP servers",
+    "examples": [
+      "$ mcp-server-tester tools test.yaml --server-config server.json",
+      "$ mcp-server-tester evals eval.yaml --server-config server.json",
+      "$ mcp-server-tester compliance --server-config server.json",
+      "$ mcp-server-tester schema",
+      "$ mcp-server-tester documentation"
+    ]
+  },
+  "evals": {
+    "description": "[test-file]  Run LLM evaluation tests (end-to-end testing",
+    "options": [
+      {
+        "option": "--server-config",
+        "description": "MCP server configuration file (JSON)",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--server-name",
+        "description": "Specific server name to use from config (if multiple",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--timeout",
+        "description": "Test timeout in milliseconds (default: \"10000\")",
+        "required": false,
+        "has_value": true,
+        "default": "\"10000\""
+      },
+      {
+        "option": "--debug",
+        "description": "Enable debug output with additional details",
+        "required": false,
+        "has_value": false,
+        "default": null
+      },
+      {
+        "option": "--junit-xml",
+        "description": "[filename]  Generate JUnit XML output (default: junit.xml)",
+        "required": false,
+        "has_value": false,
+        "default": "junit.xml"
+      },
+      {
+        "option": "--transport",
+        "description": "Transport type: stdio|http",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--url",
+        "description": "Server URL for HTTP transport",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Run LLM evaluation tests (end-to-end testing with real LLMs). Requires",
+    "examples": []
+  },
+  "with": {
+    "description": "real LLMs). Requires ANTHROPIC_API_KEY. Use",
+    "options": [
+      {
+        "option": "--version",
+        "description": "output the version number",
+        "required": false,
+        "has_value": false,
+        "default": null
+      },
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Standalone CLI tool for testing MCP servers",
+    "examples": [
+      "$ mcp-server-tester tools test.yaml --server-config server.json",
+      "$ mcp-server-tester evals eval.yaml --server-config server.json",
+      "$ mcp-server-tester compliance --server-config server.json",
+      "$ mcp-server-tester schema",
+      "$ mcp-server-tester documentation"
+    ]
+  },
+  "compliance": {
+    "description": "Run MCP protocol compliance checks",
+    "options": [
+      {
+        "option": "--server-config",
+        "description": "MCP server configuration file (JSON)",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--server-name",
+        "description": "Specific server name to use from config (if multiple",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--categories",
+        "description": "Test categories to run (comma-separated)",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--output",
+        "description": "Output format: console, json (default: \"console\")",
+        "required": false,
+        "has_value": true,
+        "default": "\"console\""
+      },
+      {
+        "option": "--timeout",
+        "description": "Overall timeout for compliance tests (default:",
+        "required": false,
+        "has_value": true,
+        "default": null
+      },
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Run MCP protocol compliance checks",
+    "examples": []
+  },
+  "schema": {
+    "description": "Display JSON schema for test configuration files",
+    "options": [
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Display JSON schema for test configuration files",
+    "examples": []
+  },
+  "help": {
+    "description": "display help for command",
+    "options": [
+      {
+        "option": "--version",
+        "description": "output the version number",
+        "required": false,
+        "has_value": false,
+        "default": null
+      },
+      {
+        "option": "--help",
+        "description": "Show help for command",
+        "required": false,
+        "has_value": false,
+        "default": null
+      }
+    ],
+    "usage": "Standalone CLI tool for testing MCP servers",
+    "examples": [
+      "$ mcp-server-tester tools test.yaml --server-config server.json",
+      "$ mcp-server-tester evals eval.yaml --server-config server.json",
+      "$ mcp-server-tester compliance --server-config server.json",
+      "$ mcp-server-tester schema",
+      "$ mcp-server-tester documentation"
+    ]
+  }
+}
