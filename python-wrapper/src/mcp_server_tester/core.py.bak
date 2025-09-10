@@ -126,7 +126,7 @@ class MCPTester:
                 capture_output=True,
                 text=True,
                 timeout=timeout / 1000.0,  # Convert to seconds
-                # Don't specify cwd - let it use the current directory
+                # Не указываем cwd - пусть использует текущую директорию
             )
 
             # Parse results
@@ -226,17 +226,17 @@ class MCPTester:
                 stderr=result.stderr,
             )
 
-        # NPM package returns text output, parse it
+        # NPM пакет возвращает текстовый вывод, парсим его
         success = result.returncode == 0
 
-        # Parse number of passed tests from string "📊 Results: 8/8 tests passed"
+        # Парсим количество пройденных тестов из строки "📊 Results: 8/8 tests passed"
         passed_tests = 0
         total_tests = 0
         execution_time = 0.0
 
         for line in result.stdout.split("\n"):
             if "Results:" in line and "tests passed" in line:
-                # Parse string "📊 Results: 8/8 tests passed (5.8s)"
+                # Парсим строку "📊 Results: 8/8 tests passed (5.8s)"
                 import re
 
                 match = re.search(r"(\d+)/(\d+)\s+tests\s+passed.*?\(([\d.]+)s\)", line)
@@ -246,7 +246,7 @@ class MCPTester:
                     execution_time = float(match.group(3))
                 break
 
-        # If parsing failed, use fallback
+        # Если парсинг не удался, используем fallback
         if total_tests == 0:
             passed_tests = 1 if success else 0
             total_tests = 1

@@ -37,7 +37,7 @@ def main() -> None:
 def tools(server_config, server_name, timeout, debug, junit_xml, transport, url, help):
     """[test-file]  Run MCP server tools tests (direct API testing)."""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "tools"]
         if server_config:
             cmd.extend(["--server-config", str(server_config)])
@@ -56,12 +56,12 @@ def tools(server_config, server_name, timeout, debug, junit_xml, transport, url,
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:
@@ -83,19 +83,19 @@ def tools(server_config, server_name, timeout, debug, junit_xml, transport, url,
 def Use(version, help):
     """"mcp-server-tester schema" to see test file"""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "Use"]
         if version:
             cmd.append("--version")
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:
@@ -123,7 +123,7 @@ def Use(version, help):
 def evals(server_config, server_name, timeout, debug, junit_xml, transport, url, help):
     """[test-file]  Run LLM evaluation tests (end-to-end testing"""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "evals"]
         if server_config:
             cmd.extend(["--server-config", str(server_config)])
@@ -142,12 +142,12 @@ def evals(server_config, server_name, timeout, debug, junit_xml, transport, url,
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:
@@ -169,19 +169,19 @@ def evals(server_config, server_name, timeout, debug, junit_xml, transport, url,
 def with(version, help):
     """real LLMs). Requires ANTHROPIC_API_KEY. Use"""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "with"]
         if version:
             cmd.append("--version")
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:
@@ -207,7 +207,7 @@ def with(version, help):
 def compliance(server_config, server_name, categories, output, timeout, help):
     """Run MCP protocol compliance checks"""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "compliance"]
         if server_config:
             cmd.extend(["--server-config", str(server_config)])
@@ -222,12 +222,12 @@ def compliance(server_config, server_name, categories, output, timeout, help):
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:
@@ -248,17 +248,17 @@ def compliance(server_config, server_name, categories, output, timeout, help):
 def schema(help):
     """Display JSON schema for test configuration files"""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "schema"]
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:
@@ -280,19 +280,19 @@ def schema(help):
 def help(version, help):
     """display help for command"""
     try:
-        # Делегируем NPM пакету напрямую
+        # Delegate to NPM package directly
         cmd = ["npx", "mcp-server-tester-sse-http-stdio", "help"]
         if version:
             cmd.append("--version")
         if help:
             cmd.append("--help")
 
-        # Выполняем команду
+        # Execute command
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30
         )
 
-        # Выводим результат
+        # Output result
         if result.stdout:
             click.echo(result.stdout)
         if result.stderr:

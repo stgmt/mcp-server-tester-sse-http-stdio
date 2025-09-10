@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Автоматическая синхронизация команд и help между NPM и Python версиями
+ * Automatic synchronization of commands and help between NPM and Python versions
  * 
- * Этот скрипт:
- * 1. Парсит NPM пакет mcp-server-tester-sse-http-stdio
- * 2. Извлекает все команды, опции и help текст
- * 3. Генерирует синхронизированный Python CLI код
- * 4. Обновляет Python wrapper для полного соответствия
+ * This script:
+ * 1. Parses NPM package mcp-server-tester-sse-http-stdio
+ * 2. Extracts all commands, options and help text
+ * 3. Generates synchronized Python CLI code
+ * 4. Updates Python wrapper for full compatibility
  */
 
 import { execSync } from 'child_process';
@@ -21,13 +21,13 @@ class CommandSynchronizer {
     }
 
     /**
-     * Извлекает информацию о командах из NPM пакета
+     * Extracts command information from NPM package
      */
     async extractNpmCommands() {
-        console.log('🔍 Извлекаю информацию о командах из NPM пакета...');
+        console.log('🔍 Extracting command information from NPM package...');
         
         try {
-            // Получаем основной help
+            // Get main help
             const mainHelp = execSync(`npx ${this.npmPackageName} --help`, { 
                 encoding: 'utf8',
                 timeout: 10000 
@@ -35,21 +35,21 @@ class CommandSynchronizer {
             
             this.parseMainHelp(mainHelp);
             
-            // Получаем help для каждой команды
+            // Get help for each command
             for (const [commandName] of this.commands) {
                 await this.extractCommandHelp(commandName);
             }
             
-            console.log(`✅ Извлечено ${this.commands.size} команд`);
+            console.log(`✅ Extracted ${this.commands.size} commands`);
             return this.commands;
             
         } catch (error) {
-            throw new Error(`Ошибка извлечения команд: ${error.message}`);
+            throw new Error(`Command extraction error: ${error.message}`);
         }
     }
 
     /**
-     * Парсит основной help для получения списка команд
+     * Parses main help to get list of commands
      */
     parseMainHelp(helpText) {
         const lines = helpText.split('\n');
@@ -82,7 +82,7 @@ class CommandSynchronizer {
     }
 
     /**
-     * Извлекает detailed help для конкретной команды
+     * Extracts detailed help for specific command
      */
     async extractCommandHelp(commandName) {
         try {
@@ -96,12 +96,12 @@ class CommandSynchronizer {
                 this.parseCommandHelp(command, commandHelp);
             }
         } catch (error) {
-            console.warn(`⚠️ Не удалось получить help для команды ${commandName}: ${error.message}`);
+            console.warn(`⚠️ Could not get help for command ${commandName}: ${error.message}`);
         }
     }
 
     /**
-     * Парсит help конкретной команды
+     * Parses help for specific command
      */
     parseCommandHelp(command, helpText) {
         const lines = helpText.split('\n');
@@ -139,14 +139,14 @@ class CommandSynchronizer {
     }
 
     /**
-     * Генерирует Python CLI код
+     * Generates Python CLI code
      */
     generatePythonCli(commands) {
-        console.log('🐍 Генерирую Python CLI код...');
+        console.log('🐍 Generating Python CLI code...');
         
         let pythonCode = this.generateCliHeader();
         
-        // Генерируем команды
+        // Generate commands
         for (const [, command] of commands) {
             pythonCode += this.generatePythonCommand(command);
         }
@@ -157,7 +157,7 @@ class CommandSynchronizer {
     }
 
     /**
-     * Генерирует заголовок Python CLI файла
+     * Generates Python CLI file header
      */
     generateCliHeader() {
         return `"""
@@ -189,17 +189,17 @@ def main() -> None:
     }
 
     /**
-     * Генерирует Python код для одной команды
+     * Generates Python code for one command
      */
     generatePythonCommand(command) {
         let code = `@main.command()\n`;
         
-        // Добавляем опции
+        // Add options
         for (const option of command.options) {
             code += this.generateClickOption(option);
         }
         
-        // Генерируем функцию
+        // Generate function
         const params = command.options
             .map(opt => this.getParameterName(opt.option))
             .join(', ');
@@ -209,7 +209,7 @@ def main() -> None:
         code += `    try:\n`;
         code += `        tester = MCPTester()\n`;
         
-        // Генерируем вызов метода
+        // Generate method call
         if (command.name === 'tools') {
             code += this.generateToolsCall(command);
         } else if (command.name === 'evals') {
@@ -234,7 +234,7 @@ def main() -> None:
     }
 
     /**
-     * Генерирует Click опцию
+     * Generates Click option
      */
     generateClickOption(option) {
         const paramName = this.getParameterName(option.option);
@@ -254,7 +254,7 @@ def main() -> None:
     }
 
     /**
-     * Получает имя параметра из опции
+     * Gets parameter name from option
      */
     getParameterName(option) {
         return option.replace(/^--?/, '').replace(/-/g, '_');
@@ -421,7 +421,7 @@ mcp-server-tester tools test.yaml --server-config config.json
      * Главный метод синхронизации
      */
     async sync() {
-        console.log('🚀 Начинаю синхронизацию команд NPM ↔ Python...\n');
+        console.log('🚀 Starting NPM ↔ Python command synchronization...\n');
         
         try {
             // 1. Извлекаем команды из NPM
