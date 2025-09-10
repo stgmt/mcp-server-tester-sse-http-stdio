@@ -1,0 +1,114 @@
+name: Docker Multi-Platform Build & Publish
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  release:
+    types: [created]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Extract version from package.json
+      id: version
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "🏷️ Extracted version: $VERSION"
+
+    - name: Check Docker Hub for existing version
+      id: docker-check
+      run: |
+        set +e
+        docker manifest inspect stgmt/mcp-server-tester-sse-http-stdio:${{ steps.version.outputs.version }} > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+          echo "should-build=false" >> $GITHUB_OUTPUT
+          echo "📦 Image already exists on Docker Hub: stgmt/mcp-server-tester-sse-http-stdio:${{ steps.version.outputs.version }}"
+        else
+          echo "should-build=true" >> $GITHUB_OUTPUT
+          echo "🚀 New version to build: stgmt/mcp-server-tester-sse-http-stdio:${{ steps.version.outputs.version }}"
+        fi
+
+    - name: Build and push Docker image
+      if: steps.docker-check.outputs.should-build == 'true'
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: |
+          stgmt/mcp-server-tester-sse-http-stdio:${{ steps.version.outputs.version }}
+          stgmt/mcp-server-tester-sse-http-stdio:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Update Docker Hub description
+      if: steps.docker-check.outputs.should-build == 'true'
+      uses: peter-evans/dockerhub-description@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        repository: stgmt/mcp-server-tester-sse-http-stdio
+        short-description: "🧪 MCP Server Testing Framework - Multi-platform Docker image for testing Model Context Protocol servers"
+        readme-filepath: ./README.md
+
+    - name: Scan Docker image for vulnerabilities
+      if: steps.docker-check.outputs.should-build == 'true'
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'stgmt/mcp-server-tester-sse-http-stdio:${{ steps.version.outputs.version }}'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      if: steps.docker-check.outputs.should-build == 'true'
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  test-docker-images:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    strategy:
+      matrix:
+        platform: [amd64, arm64]
+    
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Extract version from package.json
+      id: version
+      uses: actions/checkout@v4
+      
+    - name: Get version
+      id: get-version
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Test Docker image on ${{ matrix.platform }}
+      run: |
+        echo "🧪 Testing stgmt/mcp-server-tester-sse-http-stdio:${{ steps.get-version.outputs.version }} on ${{ matrix.platform }}"
+        docker run --rm --platform linux/${{ matrix.platform }} stgmt/mcp-server-tester-sse-http-stdio:${{ steps.get-version.outputs.version }} --version
+        docker run --rm --platform linux/${{ matrix.platform }} stgmt/mcp-server-tester-sse-http-stdio:${{ steps.get-version.outputs.version }} --help
+        echo "✅ Multi-platform image test passed for ${{ matrix.platform }}"

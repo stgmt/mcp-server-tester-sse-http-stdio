@@ -3,7 +3,7 @@
 # 🔗 GitHub Repository: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
 # 📦 NPM Package: https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio
 # 🐍 PyPI Package: https://pypi.org/project/mcp-server-tester/
-# 🐳 Docker Hub: https://hub.docker.com/r/stgmt/mcp-server-tester
+# 🐳 Docker Hub: https://hub.docker.com/r/stgmt/mcp-server-tester-sse-http-stdio
 # 
 # Supports all 3 usage methods:
 # 1. NPM package (Node.js/TypeScript)
@@ -11,7 +11,7 @@
 # 3. Docker container (this file)
 #
 # Usage:
-#   docker run --rm -v $(pwd):/workspace mcp-server-tester tools test.yaml --server-config config.json
+#   docker run --rm -v $(pwd):/workspace mcp-server-tester-sse-http-stdio tools test.yaml --server-config config.json
 
 FROM node:20-alpine
 
@@ -44,11 +44,11 @@ RUN npm install -g mcp-server-tester-sse-http-stdio
 WORKDIR /app
 
 # Copy Python wrapper sources
-COPY src/ ./src/
-COPY requirements.txt ./
-COPY setup.py ./
-COPY pyproject.toml ./
-COPY README.md ./
+COPY python-wrapper/src/ ./src/
+COPY python-wrapper/requirements.txt ./
+COPY python-wrapper/setup.py ./
+COPY python-wrapper/pyproject.toml ./
+COPY python-wrapper/README.md ./
 
 # Update ca-certificates to fix SSL issues
 RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
@@ -59,7 +59,7 @@ RUN pip3 install --break-system-packages --no-cache-dir --upgrade pip setuptools
     pip3 install --break-system-packages --no-cache-dir -e .
 
 # Create entrypoint script
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY python-wrapper/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Create convenient aliases
