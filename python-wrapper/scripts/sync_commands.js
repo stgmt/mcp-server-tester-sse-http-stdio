@@ -237,7 +237,6 @@ def main() -> None:
      * Generates Click option
      */
     generateClickOption(option) {
-        const paramName = this.getParameterName(option.option);
         let clickOption = `@click.option("${option.option}"`;
         
         if (option.hasValue && !option.option.includes('flag')) {
@@ -263,7 +262,7 @@ def main() -> None:
     /**
      * Генерирует специфичные вызовы для каждой команды
      */
-    generateToolsCall(command) {
+    generateToolsCall() {
         return `        # Делегируем NPM пакету с правильным синтаксисом
         result = tester.run_tools_test(
             test_config=test,
@@ -275,7 +274,7 @@ def main() -> None:
         sys.exit(0 if result.success else 1)`;
     }
 
-    generateEvalsCall(command) {
+    generateEvalsCall() {
         return `        result = tester.run_evals(
             test_config=test,
             server_config=server_config,
@@ -286,7 +285,7 @@ def main() -> None:
         sys.exit(0 if result.success else 1)`;
     }
 
-    generateComplianceCall(command) {
+    generateComplianceCall() {
         return `        result = tester.run_compliance_check(
             server_config=server_config,
             server_name=server_name,
@@ -297,12 +296,12 @@ def main() -> None:
         sys.exit(0 if result.success else 1)`;
     }
 
-    generateSchemaCall(command) {
+    generateSchemaCall() {
         return `        schema_data = tester.get_schema()
         click.echo(json.dumps(schema_data, indent=2))`;
     }
 
-    generateDocsCall(command) {
+    generateDocsCall() {
         return `        documentation = tester.get_documentation()
         click.echo(documentation)`;
     }
@@ -320,7 +319,7 @@ if __name__ == "__main__":
     /**
      * Генерирует обновленный core.py с правильными методами делегирования
      */
-    generateCoreUpdate(commands) {
+    generateCoreUpdate() {
         console.log('🔧 Генерирую обновленный core.py...');
         
         let coreCode = `    def run_tools_test(self, test_config, server_config, server_name=None, verbose=False):
@@ -349,7 +348,7 @@ if __name__ == "__main__":
     /**
      * Сохраняет результаты синхронизации
      */
-    async saveResults(commands, pythonCliCode, coreUpdate) {
+    async saveResults(commands, pythonCliCode) {
         const resultsDir = '../src/mcp_server_tester';
         
         // Создаем backup
@@ -429,10 +428,9 @@ mcp-server-tester tools test.yaml --server-config config.json
             
             // 2. Генерируем Python код
             const pythonCliCode = this.generatePythonCli(commands);
-            const coreUpdate = this.generateCoreUpdate(commands);
             
             // 3. Сохраняем результаты
-            await this.saveResults(commands, pythonCliCode, coreUpdate);
+            await this.saveResults(commands, pythonCliCode);
             
             console.log('\n✅ Синхронизация завершена успешно!');
             console.log('📁 Результаты сохранены в ../src/mcp_server_tester/');
