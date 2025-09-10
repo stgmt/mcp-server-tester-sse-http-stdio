@@ -370,7 +370,7 @@ class MCPTester:
         )
 
         # Create a basic tool discovery test
-        test_config = {
+        test_config: Dict[str, Any] = {
             "tools": {"expected_tool_list": [], "tests": []}  # Will discover all tools
         }
 
