@@ -52,7 +52,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64,linux/arm64,linux/arm/v7,darwin/arm64
         push: true
         tags: |
           stgmt/mcp-server-tester-sse-http-stdio:${{ steps.version.outputs.version }}
@@ -90,7 +90,7 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     strategy:
       matrix:
-        platform: [amd64, arm64]
+        platform: [amd64, arm64, "arm/v7"]
     
     steps:
     - name: Set up QEMU

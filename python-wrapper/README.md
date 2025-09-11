@@ -1,15 +1,18 @@
-# 🧪 MCP Server Tester - Programmatic Testing Framework
+# MCP Server Tester
+
+Высококлассный инструмент для тестирования MCP серверов с поддержкой протокола SSE-HTTP-STDIO, авторизацией по Bearer токену и написанием тестовых сценариев через конфигурационные файлы без необходимости программирования.
+
+## 🚀 Доступен на всех платформах
+
+[![npm version](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio.svg)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
+[![PyPI version](https://img.shields.io/pypi/v/mcp-server-tester.svg)](https://pypi.org/project/mcp-server-tester/)
+[![Docker Hub](https://img.shields.io/docker/pulls/stgmt/mcp-server-tester.svg)](https://hub.docker.com/r/stgmt/mcp-server-tester)
+
+## 🧪 Python Wrapper - Programmatic Testing Framework
 
 **Universal framework for programmatic unit and integration testing of MCP (Model Context Protocol) servers across all available protocols.**
 
-> **Docker Hub**: Comprehensive testing framework supporting HTTP, SSE, and STDIO protocols with multi-platform Docker images (AMD64/ARM64).
-
 🔗 **GitHub Repository**: https://github.com/stgmt/mcp-server-tester-sse-http-stdio
-
-[![Python Package](https://img.shields.io/pypi/v/mcp-server-tester)](https://pypi.org/project/mcp-server-tester/)
-[![Docker Image](https://img.shields.io/docker/v/stgmt/mcp-server-tester)](https://hub.docker.com/r/stgmt/mcp-server-tester)
-[![NPM Package](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
-[![GitHub](https://img.shields.io/github/stars/stgmt/mcp-server-tester-sse-http-stdio?style=social)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio)
 
 ## 🎯 What is this?
 
