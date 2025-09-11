@@ -4,7 +4,7 @@ Tests for MCP Server Tester Python wrapper core functionality.
 
 import json
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch, MagicMock, mock_open
 from pathlib import Path
 
 from mcp_server_tester.core import MCPTester, MCPTestResult, MCPTestConfig

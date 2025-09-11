@@ -5,7 +5,7 @@ This package provides a Python interface to the TypeScript/Node.js MCP Server Te
 enabling easy testing of Model Context Protocol servers from Python applications.
 """
 
-__version__ = "1.4.1"
+__version__ = "1.4.2"
 __author__ = "stgmt"
 __email__ = "your-email@example.com"
 
