@@ -1,3 +1,0 @@
-[console_scripts]
-mcp-server-tester = mcp_server_tester.cli:main
-mcp-tester = mcp_server_tester.cli:main
