@@ -7,7 +7,7 @@ A high-performance tool for testing MCP servers with SSE-HTTP-STDIO protocol sup
 ## 🚀 Available on All Platforms
 
 [![npm version](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio.svg)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
-[![PyPI version](https://img.shields.io/pypi/v/mcp-server-tester-sse-stdio.svg)](https://pypi.org/project/mcp-server-tester-sse-stdio/)
+[![PyPI version](https://img.shields.io/pypi/v/mcp-server-tester.svg)](https://pypi.org/project/mcp-server-tester/)
 [![Docker Hub](https://img.shields.io/docker/pulls/stgmt/mcp-server-tester.svg)](https://hub.docker.com/r/stgmt/mcp-server-tester)
 [![GitHub Actions](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/workflows/CI/badge.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/actions)
 
@@ -36,7 +36,7 @@ npm install -g mcp-server-tester-sse-http-stdio
 
 ### PyPI (Python)
 ```bash
-pip install mcp-server-tester-sse-stdio
+pip install mcp-server-tester
 ```
 
 ### Docker
@@ -304,7 +304,7 @@ MIT License - see [LICENSE](LICENSE) file.
 
 - **GitHub**: [stgmt/mcp-server-tester-sse-http-stdio](https://github.com/stgmt/mcp-server-tester-sse-http-stdio)
 - **NPM**: [mcp-server-tester-sse-http-stdio](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
-- **PyPI**: [mcp-server-tester-sse-stdio](https://pypi.org/project/mcp-server-tester-sse-stdio/)
+- **PyPI**: [mcp-server-tester](https://pypi.org/project/mcp-server-tester/)
 - **Docker Hub**: [stgmt/mcp-server-tester](https://hub.docker.com/r/stgmt/mcp-server-tester)
 
 ## 💬 Support
