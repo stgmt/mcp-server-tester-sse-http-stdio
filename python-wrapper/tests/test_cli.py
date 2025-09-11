@@ -94,25 +94,26 @@ class TestCLI:
             assert "Node.js not found" in result.output
 
     def test_tools_command(self):
-        """Test tools listing command."""
-        tools_list = [
-            {"name": "list_files", "description": "List files in directory"},
-            {"name": "read_file", "description": "Read file contents"},
-        ]
-
+        """Test tools command with test file."""
         with patch("mcp_server_tester.cli.MCPTester") as mock_tester_class:
             mock_tester = Mock()
-            mock_tester.list_tools.return_value = tools_list
+            test_result = MCPTestResult(
+                success=True,
+                passed_tests=5,
+                total_tests=5,
+                failed_tests=[],
+                execution_time=1.23,
+                output='{"success": true, "passed": 5, "total": 5}',
+            )
+            mock_tester.run_tools_test.return_value = test_result
             mock_tester_class.return_value = mock_tester
 
             result = self.runner.invoke(
-                main, ["tools", "--server-config", "server.json"]
+                main, ["tools", "test.json", "--server-config", "server.json"]
             )
 
             assert result.exit_code == 0
-            output_data = json.loads(result.output)
-            assert len(output_data) == 2
-            assert output_data[0]["name"] == "list_files"
+            assert "success" in result.output
 
     def test_validate_command_valid(self):
         """Test validate command with valid config."""

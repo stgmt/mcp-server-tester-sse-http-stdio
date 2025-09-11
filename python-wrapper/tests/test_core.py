@@ -58,17 +58,11 @@ class TestMCPTester:
             tester = MCPTester()
 
             # Mock test execution
-            test_output = {
-                "success": True,
-                "passed": 5,
-                "total": 5,
-                "failed": [],
-                "execution_time": 1.23,
-            }
+            test_output = "📊 Results: 5/5 tests passed (1.23s)"
 
             with patch("subprocess.run") as mock_run:
                 mock_run.return_value = Mock(
-                    returncode=0, stdout=json.dumps(test_output), stderr=""
+                    returncode=0, stdout=test_output, stderr=""
                 )
 
                 result = tester.test_server(
@@ -193,14 +187,14 @@ class TestMCPTester:
             mock_run_init.return_value = Mock(returncode=0, stdout="help", stderr="")
             tester = MCPTester()
 
-            with patch("subprocess.run") as mock_run:
-                mock_run.return_value = Mock(returncode=0, stdout="", stderr="")
-
+            # Test valid config
+            valid_config = {"test": "data"}
+            with patch("builtins.open", mock_open(read_data=json.dumps(valid_config))):
                 is_valid = tester.validate_config("config.json")
                 assert is_valid is True
 
-                # Test invalid config
-                mock_run.return_value = Mock(returncode=1, stdout="", stderr="")
+            # Test invalid config (malformed JSON)
+            with patch("builtins.open", mock_open(read_data="invalid json")):
                 is_valid = tester.validate_config("invalid.json")
                 assert is_valid is False
 

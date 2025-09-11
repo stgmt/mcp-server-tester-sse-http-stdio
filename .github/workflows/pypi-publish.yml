@@ -117,6 +117,12 @@ jobs:
           echo "📦 Version unchanged: $CURRENT_VERSION"
         fi
     
+    - name: Copy README from root
+      if: steps.version-check.outputs.should-publish == 'true'
+      run: |
+        # Copy the main README to python-wrapper for PyPI
+        cp ../README.md ./README.md
+    
     - name: Build package
       if: steps.version-check.outputs.should-publish == 'true'
       run: |
