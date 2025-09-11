@@ -21,7 +21,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: stgmt/mcp-server-tester
+          repository: stgmt/mcp-server-tester-sse-http-stdio
           readme-filepath: ./README.md
-          short-description: "Высококлассный инструмент для тестирования MCP серверов с поддержкой SSE-HTTP-STDIO, Bearer токенами и декларативными тестами"
+          short-description: "🧪 MCP Server Testing Framework - Universal testing tool for Model Context Protocol servers with SSE, HTTP, and STDIO support"
           enable-url-completion: true
