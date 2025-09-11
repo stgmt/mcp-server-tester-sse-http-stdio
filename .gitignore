@@ -39,6 +39,11 @@ tmp/
 temp/
 *.tmp
 *.temp
+*.bak
+*.backup
+*.old
+*-OLD.*
+*.orig
 
 # Secrets and credentials
 *.key
@@ -50,6 +55,10 @@ credentials/
 # Local test files
 test-local.yaml
 test-*.json
+test-*.txt
+token-*.txt
+platform-*.txt
+commands_extracted.json
 !examples/*.json
 !examples/*.yaml
 
