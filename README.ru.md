@@ -1,27 +1,27 @@
-[🇷🇺 Русская версия](./README.ru.md)
+[🇬🇧 English version](./README.md)
 
-# MCP Server Tester - High-performance testing framework for MCP servers with SSE-HTTP-STDIO protocol support, Bearer token authorization, and declarative test scenarios
+# MCP Server Tester
 
-A high-performance tool for testing MCP servers with SSE-HTTP-STDIO protocol support, Bearer token authorization, and test scenario writing through configuration files without programming.
+Высококлассный инструмент для тестирования MCP серверов с поддержкой протокола SSE-HTTP-STDIO, авторизацией по Bearer токену и написанием тестовых сценариев через конфигурационные файлы без необходимости программирования.
 
-## 🚀 Available on All Platforms
+## 🚀 Доступен на всех платформах
 
 [![npm version](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio.svg)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
 [![PyPI version](https://img.shields.io/pypi/v/mcp-server-tester-sse-stdio.svg)](https://pypi.org/project/mcp-server-tester-sse-stdio/)
 [![Docker Hub](https://img.shields.io/docker/pulls/stgmt/mcp-server-tester.svg)](https://hub.docker.com/r/stgmt/mcp-server-tester)
 [![GitHub Actions](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/workflows/CI/badge.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/actions)
 
-## ✨ Key Features
+## ✨ Ключевые возможности
 
-- 🔌 **Full SSE-HTTP-STDIO protocol support** for MCP servers
-- 🔐 **Bearer token authorization** for secure testing
-- 📝 **Declarative tests** - write scenarios in YAML without programming
-- 🎯 **Multiple assertion types** - verify any aspects of responses
-- 📊 **Detailed reports** on test execution
-- 🐳 **Docker support** for isolated testing
-- 🔄 **CI/CD integration** via GitHub Actions
+- 🔌 **Полная поддержка SSE-HTTP-STDIO протокола** для MCP серверов
+- 🔐 **Bearer токен авторизация** для безопасного тестирования
+- 📝 **Декларативные тесты** - пишите сценарии в YAML без программирования
+- 🎯 **Множественные assertion типы** - проверяйте любые аспекты ответов
+- 📊 **Детальные отчеты** о прохождении тестов
+- 🐳 **Docker поддержка** для изолированного тестирования
+- 🔄 **CI/CD интеграция** через GitHub Actions
 
-## 📦 Installation
+## 📦 Установка
 
 ### NPM (Node.js)
 ```bash
@@ -38,28 +38,28 @@ pip install mcp-server-tester-sse-stdio
 docker pull stgmt/mcp-server-tester
 ```
 
-## 🚀 Quick Start
+## 🚀 Быстрый старт
 
-### Using NPM
+### Использование через NPM
 ```bash
 npx mcp-server-tester-sse-http-stdio test --test test.yaml --server-config config.json
 ```
 
-### Using Python
+### Использование через Python
 ```bash
 mcp-server-tester test --test test.yaml --server-config config.json
 ```
 
-### Using Docker
+### Использование через Docker
 ```bash
 docker run -v $(pwd):/workspace stgmt/mcp-server-tester test --test /workspace/test.yaml
 ```
 
-## 📝 Example Test Scenario
+## 📝 Пример тестового сценария
 
 ```yaml
 name: "MCP Server Basic Test"
-description: "Testing basic MCP server functionality"
+description: "Проверка базовой функциональности MCP сервера"
 timeout: 30000
 
 tests:
@@ -94,7 +94,7 @@ tests:
         message: "Hello, MCP!"
 ```
 
-## 📋 Server Configuration
+## 📋 Конфигурация сервера
 
 ```json
 {
@@ -119,32 +119,32 @@ tests:
 }
 ```
 
-## 🛠️ CLI Commands
+## 🛠️ CLI команды
 
-### Run Tests
+### Запуск тестов
 ```bash
 mcp-server-tester test --test <test-file> --server-config <config-file> [options]
 
 Options:
-  --server-name <name>  Server name from configuration
-  --verbose            Verbose output
-  --json-output        Output results in JSON format
-  --timeout <ms>       Test timeout (default: 30000)
+  --server-name <name>  Имя сервера из конфигурации
+  --verbose            Подробный вывод
+  --json-output        Вывод результатов в JSON формате
+  --timeout <ms>       Таймаут для тестов (по умолчанию: 30000)
 ```
 
-### Validate Configuration
+### Валидация конфигурации
 ```bash
 mcp-server-tester validate --test <test-file>
 ```
 
-### List Available Server Tools
+### Список доступных инструментов сервера
 ```bash
 mcp-server-tester tools --server-config <config-file> --server-name <name>
 ```
 
-## 🐳 Docker Support
+## 🐳 Docker поддержка
 
-### Simple Run
+### Простой запуск
 ```bash
 docker run -v $(pwd):/workspace stgmt/mcp-server-tester \
   test --test /workspace/test.yaml --server-config /workspace/config.json
@@ -162,16 +162,16 @@ services:
     command: test --test /workspace/tests/test.yaml --server-config /workspace/config/server.json
 ```
 
-### Supported Platforms
-| Platform | Architecture | Status |
-|----------|--------------|--------|
+### Поддерживаемые платформы
+| Платформа | Архитектура | Статус |
+|-----------|-------------|--------|
 | Linux | amd64 | ✅ |
 | Linux | arm64 | ✅ |
 | macOS | amd64 | ✅ |
 | macOS | arm64 | ✅ |
 | Windows | amd64 | ✅ |
 
-## 🔄 CI/CD Integration
+## 🔄 CI/CD интеграция
 
 ### GitHub Actions
 ```yaml
@@ -200,9 +200,9 @@ mcp-tests:
     - mcp-server-tester test --test tests/test.yaml --server-config config.json
 ```
 
-## 📊 Assertion Examples
+## 📊 Примеры assertion
 
-### Response Structure Validation
+### Проверка структуры ответа
 ```yaml
 expect:
   status: "success"
@@ -217,7 +217,7 @@ expect:
         minimum: 0
 ```
 
-### Array Validation
+### Проверка массивов
 ```yaml
 expect:
   tools:
@@ -228,7 +228,7 @@ expect:
       required: ["name", "description"]
 ```
 
-### Conditional Validation
+### Условные проверки
 ```yaml
 expect:
   oneOf:
@@ -238,9 +238,9 @@ expect:
       result: { queued: true }
 ```
 
-## 🔧 Advanced Features
+## 🔧 Расширенные возможности
 
-### Environment Variables
+### Переменные окружения
 ```yaml
 tests:
   - name: "Test with env variables"
@@ -249,7 +249,7 @@ tests:
       BASE_URL: "${TEST_BASE_URL:-http://localhost:3000}"
 ```
 
-### Sequential Tests with Dependencies
+### Последовательные тесты с зависимостями
 ```yaml
 tests:
   - name: "Create resource"
@@ -269,7 +269,7 @@ tests:
         id: "${resource_id}"
 ```
 
-### Parallel Execution
+### Параллельное выполнение
 ```yaml
 parallel_groups:
   - name: "Performance tests"
@@ -279,34 +279,34 @@ parallel_groups:
       - name: "Test 3"
 ```
 
-## 📚 Documentation
+## 📚 Документация
 
-- [Complete Guide](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/wiki)
+- [Полное руководство](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/wiki)
 - [API Reference](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/wiki/API)
-- [Test Examples](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/tree/main/examples)
+- [Примеры тестов](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/tree/main/examples)
 - [FAQ](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/wiki/FAQ)
 
-## 🤝 Contributing
+## 🤝 Вклад в проект
 
-We welcome contributions to the project! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+Мы приветствуем вклад в развитие проекта! См. [CONTRIBUTING.md](CONTRIBUTING.md) для деталей.
 
-## 📄 License
+## 📄 Лицензия
 
-MIT License - see [LICENSE](LICENSE) file.
+MIT License - см. [LICENSE](LICENSE) файл.
 
-## 🔗 Links
+## 🔗 Ссылки
 
 - **GitHub**: [stgmt/mcp-server-tester-sse-http-stdio](https://github.com/stgmt/mcp-server-tester-sse-http-stdio)
 - **NPM**: [mcp-server-tester-sse-http-stdio](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
 - **PyPI**: [mcp-server-tester-sse-stdio](https://pypi.org/project/mcp-server-tester-sse-stdio/)
 - **Docker Hub**: [stgmt/mcp-server-tester](https://hub.docker.com/r/stgmt/mcp-server-tester)
 
-## 💬 Support
+## 💬 Поддержка
 
-- [Create Issue](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/issues)
+- [Создать Issue](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/issues)
 - [Discussions](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/discussions)
 - Email: support@stgmt.dev
 
 ---
 
-*Developed with ❤️ by STGMT team*
+*Разработано с ❤️ командой STGMT*
