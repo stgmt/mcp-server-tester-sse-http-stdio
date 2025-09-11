@@ -46,7 +46,6 @@ WORKDIR /app
 # Copy Python wrapper sources
 COPY python-wrapper/src/ ./src/
 COPY python-wrapper/requirements.txt ./
-COPY python-wrapper/setup.py ./
 COPY python-wrapper/pyproject.toml ./
 COPY python-wrapper/README.md ./
 
