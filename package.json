@@ -49,7 +49,8 @@
     "mcp-tester",
     "eventSource",
     "process-communication",
-    "api-testing"
+    "api-testing",
+    "docker"
   ],
   "author": "stgmt",
   "license": "MIT",
@@ -95,5 +96,9 @@
   "bugs": {
     "url": "https://github.com/stgmt/mcp-server-tester-sse-http-stdio/issues"
   },
-  "homepage": "https://github.com/stgmt/mcp-server-tester-sse-http-stdio#readme"
+  "homepage": "https://github.com/stgmt/mcp-server-tester-sse-http-stdio#readme",
+  "docker": {
+    "repository": "https://hub.docker.com/r/stgmt/mcp-server-tester",
+    "image": "stgmt/mcp-server-tester"
+  }
 }

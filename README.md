@@ -6,12 +6,15 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![npm version](https://img.shields.io/npm/v/mcp-server-tester-sse-http-stdio)](https://www.npmjs.com/package/mcp-server-tester-sse-http-stdio)
 [![PyPI version](https://img.shields.io/pypi/v/mcp-server-tester)](https://pypi.org/project/mcp-server-tester/)
+[![Docker Hub](https://img.shields.io/badge/docker-stgmt%2Fmcp--server--tester-blue)](https://hub.docker.com/r/stgmt/mcp-server-tester)
 [![Test Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/pulls)
 
 **The most comprehensive MCP (Model Context Protocol) server testing tool** supporting HTTP REST APIs, Server-Sent Events (SSE), and STDIO process communication. Built for testing AI/LLM tools, Anthropic Claude MCP servers, OpenAI-compatible APIs, and custom implementations.
 
 🐍 **Now available for Python!** - Use the same powerful testing capabilities from Python applications with our [Python wrapper](python-wrapper/README.md).
+
+🐳 **Now available on Docker Hub!** - Run tests in containerized environments with our [Docker image](https://hub.docker.com/r/stgmt/mcp-server-tester).
 
 ---
 
@@ -21,11 +24,13 @@
 - [Quick Start](#-quick-start)
   - [Node.js/TypeScript](#nodejs-typescript)
   - [Python](#python)
+  - [Docker](#docker)
 - [Installation](#-installation)
 - [Usage Examples](#-usage-examples)
 - [Configuration](#-configuration)
 - [Features](#-features)
 - [Python Wrapper](#-python-wrapper)
+- [Docker Support](#-docker-support)
 - [Architecture](#-architecture)
 - [Troubleshooting](#-troubleshooting)
 - [API Reference](#-api-reference)
@@ -153,6 +158,41 @@ mcp-server-tester create-server-config  # Interactive config creation
 
 📚 **Full Python documentation**: [python-wrapper/README.md](python-wrapper/README.md)
 
+### Docker
+
+The MCP Server Tester is also available as a Docker image, providing a containerized environment with all dependencies pre-installed.
+
+#### Pull the Docker image
+```bash
+docker pull stgmt/mcp-server-tester
+```
+
+#### Run tests with Docker
+```bash
+# Mount your test files and run tests
+docker run -v $(pwd):/workspace stgmt/mcp-server-tester \
+  tools /workspace/test.yaml \
+  --server-config /workspace/server.json \
+  --server-name my-server
+```
+
+#### Docker Compose Example
+```yaml
+version: '3.8'
+services:
+  mcp-tester:
+    image: stgmt/mcp-server-tester
+    volumes:
+      - ./tests:/workspace/tests
+      - ./configs:/workspace/configs
+    command: >
+      tools /workspace/tests/test.yaml
+      --server-config /workspace/configs/server.json
+      --server-name my-server
+```
+
+🐳 **Docker Hub**: [stgmt/mcp-server-tester](https://hub.docker.com/r/stgmt/mcp-server-tester)
+
 ---
 
 ## 🚨 Common Pitfalls
@@ -241,9 +281,19 @@ npm install
 npm run build
 ```
 
-### From NPM (when published)
+### From NPM
 ```bash
 npm install -g mcp-server-tester-sse-http-stdio
+```
+
+### From Docker Hub
+```bash
+docker pull stgmt/mcp-server-tester
+```
+
+### From PyPI (Python)
+```bash
+pip install mcp-server-tester
 ```
 
 ---
@@ -378,6 +428,165 @@ print(f"✅ {result.passed_tests}/{result.total_tests} tests passed!")
 ```
 
 📚 **Full Documentation**: [python-wrapper/README.md](python-wrapper/README.md)
+
+---
+
+## 🐳 Docker Support
+
+The MCP Server Tester is available as a multi-platform Docker image, providing a consistent testing environment across different systems.
+
+### Docker Image Features
+- **🎯 Multi-platform Support** - linux/amd64, linux/arm64, linux/arm/v7, darwin/arm64
+- **📦 All Dependencies Included** - Node.js, TypeScript, and all required packages
+- **🔒 Security Scanned** - Regular vulnerability scanning with Trivy
+- **🚀 CI/CD Ready** - Automated builds on every release
+- **⚡ Optimized Size** - Minimal Alpine Linux base image
+
+### Installation Methods
+
+#### Docker Hub
+```bash
+# Pull the latest version
+docker pull stgmt/mcp-server-tester
+
+# Pull a specific version
+docker pull stgmt/mcp-server-tester:1.4.1
+
+# Pull for specific platform
+docker pull --platform linux/arm64 stgmt/mcp-server-tester
+```
+
+#### GitHub Container Registry (alternative)
+```bash
+docker pull ghcr.io/stgmt/mcp-server-tester
+```
+
+### Usage Examples
+
+#### Basic Testing
+```bash
+# Run tests with mounted configuration
+docker run -v $(pwd):/workspace stgmt/mcp-server-tester \
+  tools /workspace/test.yaml \
+  --server-config /workspace/server.json \
+  --server-name my-server
+```
+
+#### Interactive Shell
+```bash
+# Start container with shell access
+docker run -it --entrypoint /bin/sh stgmt/mcp-server-tester
+
+# Inside container
+mcp-server-tester tools test.yaml --server-config server.json --server-name my-server
+```
+
+#### Network Testing
+```bash
+# Test servers on host network
+docker run --network host stgmt/mcp-server-tester \
+  tools test.yaml \
+  --server-config server.json \
+  --server-name local-server
+```
+
+### Docker Compose Integration
+
+```yaml
+version: '3.8'
+
+services:
+  # Your MCP server
+  mcp-server:
+    image: your-mcp-server:latest
+    ports:
+      - "8001:8001"
+
+  # MCP Server Tester
+  tester:
+    image: stgmt/mcp-server-tester
+    depends_on:
+      - mcp-server
+    volumes:
+      - ./tests:/tests
+      - ./configs:/configs
+    command: >
+      tools /tests/integration.yaml
+      --server-config /configs/docker-server.json
+      --server-name docker-server
+    environment:
+      - DEBUG=true
+```
+
+### CI/CD Pipeline Integration
+
+#### GitHub Actions
+```yaml
+name: MCP Server Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run MCP Tests
+        run: |
+          docker run -v ${{ github.workspace }}:/workspace \
+            stgmt/mcp-server-tester \
+            tools /workspace/tests/test.yaml \
+            --server-config /workspace/configs/server.json \
+            --server-name ci-server \
+            --junit-xml /workspace/test-results.xml
+            
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: test-results.xml
+```
+
+#### GitLab CI
+```yaml
+test-mcp-server:
+  image: stgmt/mcp-server-tester
+  script:
+    - mcp-server-tester tools tests/test.yaml --server-config configs/server.json --server-name gitlab-server
+  artifacts:
+    reports:
+      junit: test-results.xml
+```
+
+### Building Custom Images
+
+Create a Dockerfile for your specific testing needs:
+
+```dockerfile
+FROM stgmt/mcp-server-tester
+
+# Add custom test files
+COPY tests/ /app/tests/
+COPY configs/ /app/configs/
+
+# Set default command
+CMD ["tools", "/app/tests/all.yaml", "--server-config", "/app/configs/server.json"]
+```
+
+### Platform Support
+
+| Platform | Architecture | Status |
+|----------|-------------|--------|
+| Linux | amd64 | ✅ Fully Supported |
+| Linux | arm64 | ✅ Fully Supported |
+| Linux | arm/v7 | ✅ Fully Supported |
+| macOS | arm64 (M1/M2) | ✅ Experimental |
+| Windows | amd64 | ⚠️ Use WSL2 |
+
+### Resources
+- 🐳 **Docker Hub**: [stgmt/mcp-server-tester](https://hub.docker.com/r/stgmt/mcp-server-tester)
+- 📦 **GitHub Packages**: [ghcr.io/stgmt/mcp-server-tester](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/pkgs/container/mcp-server-tester)
+- 🔧 **Dockerfile**: [View on GitHub](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/blob/main/Dockerfile)
 
 ---
 
