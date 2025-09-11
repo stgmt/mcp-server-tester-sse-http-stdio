@@ -11,6 +11,12 @@ A high-performance tool for testing MCP servers with SSE-HTTP-STDIO protocol sup
 [![Docker Hub](https://img.shields.io/docker/pulls/stgmt/mcp-server-tester.svg)](https://hub.docker.com/r/stgmt/mcp-server-tester)
 [![GitHub Actions](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/workflows/CI/badge.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/actions)
 
+## 👨‍💻 Author
+
+Created by [**@ii_pomogator**](https://t.me/ii_pomogator) - AI Assistant Channel on Telegram
+
+---
+
 ## ✨ Key Features
 
 - 🔌 **Full SSE-HTTP-STDIO protocol support** for MCP servers
@@ -309,4 +315,4 @@ MIT License - see [LICENSE](LICENSE) file.
 
 ---
 
-*Developed with ❤️ by STGMT team*
+*Developed with ❤️ by [@ii_pomogator](https://t.me/ii_pomogator)*

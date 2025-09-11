@@ -11,6 +11,12 @@
 [![Docker Hub](https://img.shields.io/docker/pulls/stgmt/mcp-server-tester.svg)](https://hub.docker.com/r/stgmt/mcp-server-tester)
 [![GitHub Actions](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/workflows/CI/badge.svg)](https://github.com/stgmt/mcp-server-tester-sse-http-stdio/actions)
 
+## 👨‍💻 Автор
+
+Создано [**@ii_pomogator**](https://t.me/ii_pomogator) - Канал ИИ-помогатор в Telegram
+
+---
+
 ## ✨ Ключевые возможности
 
 - 🔌 **Полная поддержка SSE-HTTP-STDIO протокола** для MCP серверов
@@ -309,4 +315,4 @@ MIT License - см. [LICENSE](LICENSE) файл.
 
 ---
 
-*Разработано с ❤️ командой STGMT*
+*Разработано с ❤️ [@ii_pomogator](https://t.me/ii_pomogator)*
